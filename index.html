@@ -1,48 +1,41 @@
+
 <!DOCTYPE html>
 <html lang="pt-br">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Cardápio Digital</title>
+    <title>Meu Cardápio Online</title>
     <style>
-        body { font-family: Arial, sans-serif; text-align: center; padding: 20px; background-color: #f4f4f4; }
-        .card { background: white; border-radius: 15px; padding: 20px; margin: 15px auto; max-width: 300px; box-shadow: 0 4px 6px rgba(0,0,0,0.1); }
-        h1 { color: #e74c3c; }
-        .btn { background-color: #25d366; color: white; border: none; padding: 15px 30px; border-radius: 50px; font-weight: bold; cursor: pointer; font-size: 16px; text-decoration: none; display: inline-block; }
-        .btn:hover { background-color: #128c7e; }
+        body { font-family: sans-serif; text-align: center; padding: 50px; background-color: #eee; }
+        .item { background: white; padding: 20px; border-radius: 15px; margin-bottom: 20px; box-shadow: 0 2px 5px rgba(0,0,0,0.2); }
+        .btn { background: #25d366; color: white; border: none; padding: 15px 30px; border-radius: 5px; font-size: 18px; cursor: pointer; text-decoration: none; display: block; width: 100%; }
     </style>
 </head>
 <body>
 
-    <h1>🍕 Meu Delivery</h1>
-    <p>Escolha seu prato abaixo:</p>
+    <h1>🍕 Teste de Pedido</h1>
 
-    <div class="card">
-        <h3>Pizza Margherita</h3>
-        <p>R$ 45,00</p>
-        <button class="btn" onclick="enviarPedido('Pizza Margherita')">Pedir no WhatsApp</button>
-    </div>
-
-    <div class="card">
-        <h3>Hambúrguer Gourmet</h3>
-        <p>R$ 30,00</p>
-        <button class="btn" onclick="enviarPedido('Hambúrguer Gourmet')">Pedir no WhatsApp</button>
+    <div class="item">
+        <h3>Produto de Teste</h3>
+        <p>R$ 10,00</p>
+        <!-- BOTÃO COM LINK DIRETO (Sem JavaScript para não falhar) -->
+        <a id="linkPedido" class="btn" href="#">ENVIAR PEDIDO AGORA</a>
     </div>
 
     <script>
-        function enviarPedido(produto) {
-            // --- CONFIGURAÇÃO AQUI ---
-            const telefone = "59191714945"; // Coloque o número com código do país (ex: 5551999999999)
-            // -------------------------
+        // --- CONFIGURAÇÃO ---
+        const meuNumero = "59891714945"; // COLOQUE SEU NÚMERO AQUI (Apenas números)
+        // -------------------
 
-            const texto = encodeURIComponent("Olá! Gostaria de pedir: " + producto);
-            const url = "https://whatsapp.com" + telefone + "&text=" + texto;
-            
-            // Abre o WhatsApp
-            window.open(url, '_blank').focus();
-        }
+        const texto = encodeURIComponent("Olá! Estou testando o botão de pedido do meu sistema.");
+        const urlFinal = "https://wa.me" + meuNumero + "?text=" + texto;
+
+        // Atribui o link ao botão assim que a página carrega
+        document.getElementById("linkPedido").href = urlFinal;
+        
+        // Alerta de teste para saber se o script rodou
+        console.log("Link configurado para: " + urlFinal);
     </script>
 
 </body>
-</html>
 </html>

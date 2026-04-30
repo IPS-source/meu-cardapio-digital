@@ -30,7 +30,6 @@
 
     <script>
         function enviarPedido(item) {
-            // REEMPLAZA EL NÚMERO ABAJO (con código de país, ej: 54911...)
             const telefono = "+598714945"; 
             const texto = encodeURIComponent(`¡Hola! Me gustaría pedir: ${item}. ¿Me confirman el pedido?`);
             window.location.href = `https://wa.me{telefono}?text=${texto}`;

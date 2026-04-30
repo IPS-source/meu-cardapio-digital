@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Cardápio Digital - Prototipo</title>
+    <style>
+        body { font-family: sans-serif; text-align: center; padding: 20px; background: #f4f4f4; }
+        .item { background: white; padding: 15px; margin: 10px; border-radius: 10px; shadow: 2px 2px 5px #ccc; }
+        button { background: #25d366; color: white; border: none; padding: 10px 20px; border-radius: 5px; cursor: pointer; }
+    </style>
+</head>
+<body>
+    <h1>🍕 Nuestro Menú</h1>
+    
+    <div class="item">
+        <h3>Pizza Margherita</h3>
+        <p>Precio: R$ 40,00</p>
+        <button onclick="pedir('Pizza Margherita')">Agregar al pedido</button>
+    </div>
+
+    <div class="item">
+        <h3>Hamburguesa Classic</h3>
+        <p>Precio: R$ 25,00</p>
+        <button onclick="pedir('Hamburguesa Classic')">Agregar al pedido</button>
+    </div>
+
+    <script>
+        function pedir(producto) {
+            // Esta es la magia: construye el link de WhatsApp con el pedido
+            const mensaje = encodeURIComponent(`Hola! Me gustaría pedir: ${producto}`);
+            const telefono = "TU_NUMERO_AQUI"; // Ejemplo: 5511999999999
+            window.location.href = `https://wa.me{telefono}?text=${mensaje}`;
+        }
+    </script>
+</body>
+</html>

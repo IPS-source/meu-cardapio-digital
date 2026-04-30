@@ -1,40 +1,48 @@
 <!DOCTYPE html>
-<html lang="es">
+<html lang="pt-br">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Menú Digital Express</title>
+    <title>Cardápio Digital</title>
     <style>
-        body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; text-align: center; padding: 20px; background: #f8f9fa; color: #333; }
-        .card { background: white; padding: 20px; margin: 15px auto; border-radius: 15px; box-shadow: 0 4px 8px rgba(0,0,0,0.1); max-width: 400px; }
+        body { font-family: Arial, sans-serif; text-align: center; padding: 20px; background-color: #f4f4f4; }
+        .card { background: white; border-radius: 15px; padding: 20px; margin: 15px auto; max-width: 300px; box-shadow: 0 4px 6px rgba(0,0,0,0.1); }
         h1 { color: #e74c3c; }
-        .btn-pedir { background: #25d366; color: white; border: none; padding: 12px 25px; border-radius: 25px; cursor: pointer; font-size: 16px; font-weight: bold; }
-        .btn-pedir:hover { background: #128c7e; }
+        .btn { background-color: #25d366; color: white; border: none; padding: 15px 30px; border-radius: 50px; font-weight: bold; cursor: pointer; font-size: 16px; text-decoration: none; display: inline-block; }
+        .btn:hover { background-color: #128c7e; }
     </style>
 </head>
 <body>
-    <h1>🍕 Nuestro Menú</h1>
-    <p>Haz clic en el botón para armar tu pedido:</p>
-    
+
+    <h1>🍕 Meu Delivery</h1>
+    <p>Escolha seu prato abaixo:</p>
+
     <div class="card">
         <h3>Pizza Margherita</h3>
-        <p>Precio: $10.00</p>
-        <button class="btn-pedir" onclick="enviarPedido('Pizza Margherita')">Pedir por WhatsApp</button>
+        <p>R$ 45,00</p>
+        <button class="btn" onclick="enviarPedido('Pizza Margherita')">Pedir no WhatsApp</button>
     </div>
 
     <div class="card">
-        <h3>Hamburguesa Doble</h3>
-        <p>Precio: $8.50</p>
-        <button class="btn-pedir" onclick="enviarPedido('Hamburguesa Doble')">Pedir por WhatsApp</button>
+        <h3>Hambúrguer Gourmet</h3>
+        <p>R$ 30,00</p>
+        <button class="btn" onclick="enviarPedido('Hambúrguer Gourmet')">Pedir no WhatsApp</button>
     </div>
 
     <script>
-        function enviarPedido(item) {
-            // REEMPLAZA EL NÚMERO ABAJO (con código de país, ej: 54911...)
-            const telefono = "+59891714945"; 
-         const texto = encodeURIComponent(`¡Hola! Me gustaría pedir: ${item}.`);
-    window.location.href = `https://wa.me{telefono}?text=${texto}`;
-}
+        function enviarPedido(produto) {
+            // --- CONFIGURAÇÃO AQUI ---
+            const telefone = "+591 91 714 945"; // Coloque o número com código do país (ex: 5551999999999)
+            // -------------------------
+
+            const texto = encodeURIComponent("Olá! Gostaria de pedir: " + producto);
+            const url = "https://whatsapp.com" + telefone + "&text=" + texto;
+            
+            // Abre o WhatsApp
+            window.open(url, '_blank').focus();
+        }
     </script>
+
 </body>
+</html>
 </html>

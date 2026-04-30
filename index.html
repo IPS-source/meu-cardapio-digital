@@ -4,50 +4,34 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Menú Digital - Pedidos Online</title>
+    <title>Menú - Pedidos Online</title>
     <style>
-        body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; text-align: center; padding: 20px; background-color: #f4f7f6; color: #333; }
-        h1 { color: #e74c3c; margin-bottom: 5px; }
-        p { color: #666; margin-bottom: 30px; }
-        .card { background: white; border-radius: 15px; padding: 20px; margin: 15px auto; max-width: 350px; box-shadow: 0 4px 15px rgba(0,0,0,0.1); border: 1px solid #eee; }
-        .card h3 { margin: 10px 0; color: #2c3e50; }
-        .precio { font-size: 1.2em; font-weight: bold; color: #27ae60; margin-bottom: 15px; }
-        .btn { background-color: #25d366; color: white; border: none; padding: 12px 25px; border-radius: 50px; font-weight: bold; cursor: pointer; font-size: 16px; text-decoration: none; display: inline-block; transition: background 0.3s; }
-        .btn:hover { background-color: #128c7e; }
+        body { font-family: sans-serif; text-align: center; padding: 20px; background: #fdfdfd; }
+        .card { background: white; padding: 20px; margin: 15px auto; border-radius: 15px; box-shadow: 0 4px 10px rgba(0,0,0,0.1); max-width: 350px; }
+        h1 { color: #d35400; }
+        .btn-link { 
+            background: #25d366; color: white; border: none; padding: 15px 30px; 
+            border-radius: 30px; font-weight: bold; text-decoration: none; 
+            display: inline-block; font-size: 16px; margin-top: 10px;
+        }
     </style>
 </head>
 <body>
-
-    <h1>🍕 Nuestro Menú</h1>
-    <p>Haz tu pedido rápido por WhatsApp</p>
-
+    <h1>🍕 Menú ips-source</h1>
+    <p>Toca para pedir por WhatsApp</p>
+    
     <div class="card">
         <h3>Pizza Margherita</h3>
-        <div class="precio">$ 450</div>
-        <button class="btn" onclick="enviarPedido('Pizza Margherita')">Pedir por WhatsApp</button>
+        <p>Precio: $450</p>
+        <!-- API LINK: Más estable para evitar errores de DNS -->
+        <a class="btn-link" href="https://whatsapp.com">Pedir ahora</a>
     </div>
 
     <div class="card">
-        <h3>Hambúrguer Gourmet</h3>
-        <div class="precio">$ 350</div>
-        <button class="btn" onclick="enviarPedido('Hambúrguer Gourmet')">Pedir por WhatsApp</button>
+        <h3>Hamburguesa Doble</h3>
+        <p>Precio: $350</p>
+        <a class="btn-link" href="https://whatsapp.com">Pedir ahora</a>
     </div>
-
-    <script>
-        function enviarPedido(producto) {
-            // Número de Uruguay ya configurado con el formato correcto
-            const meuNumero = "59891714945"; 
-
-            // Texto que llegará a tu WhatsApp
-            const texto = encodeURIComponent("¡Hola! Me gustaría pedir: " + producto);
-            
-            // URL con la barra '/' corregida para evitar error de DNS
-            const urlFinal = "https://wa.me" + meuNumero + "?text=" + texto;
-            
-            // Redirige directamente a WhatsApp
-            window.location.href = urlFinal;
-        }
-    </script>
-
 </body>
 </html>
+

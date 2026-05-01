@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <title>Panel IPS-Source | Brave Edition</title>
+    <!-- Cargamos librerías desde un CDN alternativo para evitar bloqueos -->
+    <script src="https://gstatic.com"></script>
+    <script src="https://gstatic.com"></script>
+    <style>
+        body { font-family: 'Segoe UI', sans-serif; background: #0f0f0f; color: #fff; padding: 20px; }
+        .grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(320px, 1fr)); gap: 15px; }
+        .card { background: #ffffff; color: #1a1a1a; padding: 20px; border-radius: 12px; border-top: 8px solid #fb542b; box-shadow: 0 10px 20px rgba(0,0,0,0.3); }
+        .status-badge { background: #fb542b; color: white; padding: 4px 8px; border-radius: 4px; font-size: 0.8em; font-weight: bold; }
+        button { background: #2ecc71; color: white; border: none; padding: 12px; width: 100%; border-radius: 8px; cursor: pointer; font-weight: bold; margin-top: 15px; font-size: 16px; }
+        .no-pedidos { text-align: center; color: #444; margin-top: 50px; font-size: 1.3em; border: 2px dashed #333; padding: 20px; border-radius: 10px; }
+        .brave-alert { background: #ffcc00; color: #000; padding: 10px; text-align: center; border-radius: 5px; margin-bottom: 20px; font-size: 0.9em; }
+    </style>
+</head>
+<body>
+
+    <div class="brave-alert">🦁 <b>Tip para Brave:</b> Si no carga, haz clic en el León (Shields) y desactiva los protectores para este archivo local.</div>
+
+    <h1>🔔 Pedidos Entrantes | IPS-Source</h1>
+    <div id="contenedor" class="grid">
+        <p class="no-pedidos">Sincronizando con Firebase...<br><small>Si este mensaje no cambia, revisa tu conexión.</small></p>
+    </div>
+
+    <audio id="alarma" src="https://mixkit.co" preload="auto"></audio>
+
+    <script>
+        const firebaseConfig = { databaseURL: "https://ips-source-pedidos-default-rtdb.firebaseio.com/" };
+        
+        try {
+            firebase.initializeApp(firebaseConfig);
+            const db = firebase.database();
+
+            db.ref('pedidos').on('child_added', (snaps) => {
+                const noP = document.querySelector('.no-pedidos');
+                if (noP) noP.remove();
+
+                const p = snaps.val();
+                // Intentar reproducir sonido
+                const audio = document.getElementById('alarma');
+                audio.play().catch(() => console.log("Brave bloqueó el audio. Haz clic en la página."));
+
+                const div = document.createElement('div');
+                div.className = 'card';
+                div.id = snaps.key;
+                div.innerHTML = `
+                    <div style="display:flex; justify-content:space-between; margin-bottom:10px;">
+                        <small style="color: #666;">${p.fecha}</small>
+                        <span class="status-badge">NUEVO</span>
+                    </div>
+                    <p><b>📱 Cliente:</b> ${p.cliente}</p>
+                    <div style="background:#f1f1f1; padding:12px; border-radius:8px; font-family:monospace; white-space: pre-wrap;">${p.contenido}</div>
+                    <button onclick="despachar('${snaps.key}')">✓ MARCAR COMO ENTREGADO</button>
+                `;
+                document.getElementById('contenedor').prepend(div);
+            });
+            
+            console.log("Conectado exitosamente a Firebase");
+
+        } catch (error) {
+            document.querySelector('.no-pedidos').innerHTML = "❌ Error de conexión.<br>Brave bloqueó el script de Firebase.";
+            console.error(error);
+        }
+
+        function despachar(id) {
+            if(confirm("¿Pedido entregado?")) {
+                firebase.database().ref('pedidos').child(id).remove().then(() => {
+                    document.getElementById(id).remove();
+                });
+            }
+        }
+    </script>
+</body>
+</html>

@@ -1,113 +1,41 @@
 <!DOCTYPE html>
-<html lang="pt-br">
+<html lang="es">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Cardápio Digital | IPS-Source</title>
+    <title>Menú IPS-Source</title>
     <style>
-        :root { --primary: #e74c3c; --success: #25d366; --bg: #f8f9fa; }
-        body { font-family: 'Segoe UI', Roboto, sans-serif; background: var(--bg); margin: 0; padding-bottom: 120px; }
-        
-        header { background: var(--primary); color: white; padding: 20px; text-align: center; border-bottom-left-radius: 20px; border-bottom-right-radius: 20px; box-shadow: 0 4px 10px rgba(0,0,0,0.1); }
-        
-        .container { padding: 15px; max-width: 500px; margin: auto; }
-        
-        .card { background: white; border-radius: 15px; overflow: hidden; margin-bottom: 20px; box-shadow: 0 4px 15px rgba(0,0,0,0.05); display: flex; flex-direction: column; transition: transform 0.2s; }
-        .card:active { transform: scale(0.98); }
-        
-        .card-img { width: 100%; height: 160px; object-fit: cover; }
-        
-        .card-body { padding: 15px; text-align: left; }
-        .card-title { margin: 0; font-size: 1.2rem; color: #2c3e50; }
-        .card-price { color: var(--primary); font-weight: bold; font-size: 1.1rem; margin: 5px 0; }
-        
-        .btn-add { background: var(--primary); color: white; border: none; padding: 10px; border-radius: 8px; cursor: pointer; width: 100%; font-weight: bold; margin-top: 10px; }
-
-        /* Rodapé do Carrinho */
-        .cart-footer { position: fixed; bottom: 0; background: white; width: 100%; max-width: 500px; left: 50%; transform: translateX(-50%); padding: 20px; box-shadow: 0 -5px 20px rgba(0,0,0,0.1); border-top-left-radius: 25px; border-top-right-radius: 25px; box-sizing: border-box; }
-        .cart-info { display: flex; justify-content: space-between; align-items: center; margin-bottom: 15px; }
-        .total-label { font-size: 1.1rem; color: #7f8c8d; }
-        .total-amount { font-size: 1.5rem; font-weight: bold; color: #2c3e50; }
-        
-        .btn-finish { background: var(--success); color: white; text-align: center; padding: 15px; border-radius: 15px; text-decoration: none; display: block; font-weight: bold; font-size: 1.1rem; box-shadow: 0 4px 10px rgba(37, 211, 102, 0.3); }
+        body { font-family: sans-serif; text-align: center; padding: 20px; background: #f4f4f4; }
+        .card { background: white; border-radius: 15px; padding: 15px; margin: 15px auto; max-width: 350px; box-shadow: 0 4px 8px rgba(0,0,0,0.1); }
+        .btn-add { background: #e74c3c; color: white; border: none; padding: 10px 20px; border-radius: 5px; cursor: pointer; }
+        .footer { position: fixed; bottom: 0; left: 0; right: 0; background: white; padding: 20px; border-top: 2px solid #ddd; }
+        .btn-finalizar { background: #25d366; color: white; border: none; padding: 15px 30px; border-radius: 30px; font-weight: bold; width: 100%; text-decoration: none; display: block; }
     </style>
 </head>
 <body>
-
-<header>
-    <h1 style="margin:0">IPS-Source 🍕</h1>
-    <p style="margin:5px 0 0">O melhor sabor em segundos</p>
-</header>
-
-<div class="container">
-    <!-- Produto 1 -->
+    <h1>🍕 Nuestro Menú</h1>
     <div class="card">
-        <img src="https://unsplash.com" class="card-img" alt="Pizza">
-        <div class="card-body">
-            <h3 class="card-title">Pizza Margherita</h3>
-            <p class="card-price">$ 450</p>
-            <button class="btn-add" onclick="addItem('Pizza Margherita', 450)">+ Adicionar ao Carrinho</button>
-        </div>
+        <h3>Pizza Margherita</h3><p>$ 450</p>
+        <button class="btn-add" onclick="add('Pizza Margherita', 450)">Agregar</button>
     </div>
-
-    <!-- Produto 2 -->
     <div class="card">
-        <img src="https://unsplash.com" class="card-img" alt="Burger">
-        <div class="card-body">
-            <h3 class="card-title">Hambúrguer Doble</h3>
-            <p class="card-price">$ 350</p>
-            <button class="btn-add" onclick="addItem('Hambúrguer Doble', 350)">+ Adicionar ao Carrinho</button>
-        </div>
+        <h3>Hamburguesa Doble</h3><p>$ 350</p>
+        <button class="btn-add" onclick="add('Hamburguesa Doble', 350)">Agregar</button>
     </div>
 
-    <!-- Produto 3 -->
-    <div class="card">
-        <img src="https://unsplash.com" class="card-img" alt="Refri">
-        <div class="card-body">
-            <h3 class="card-title">Coca-Cola 600ml</h3>
-            <p class="card-price">$ 120</p>
-            <button class="btn-add" onclick="addItem('Coca-Cola 600ml', 120)">+ Adicionar ao Carrinho</button>
-        </div>
+    <div class="footer">
+        <p>Total: $ <span id="total">0</span></p>
+        <button class="btn-finalizar" onclick="checkout()">🚀 Finalizar Pedido</button>
     </div>
-</div>
 
-<div class="cart-footer">
-    <div class="cart-info">
-        <span class="total-label">Total do Pedido:</span>
-        <span class="total-amount">$ <span id="total-val">0</span></span>
-    </div>
-    <a href="javascript:void(0)" class="btn-finish" onclick="checkout()">🚀 Finalizar Pedido</a>
-</div>
-
-<script>
-    let cart = [];
-    let total = 0;
-
-    function addItem(name, price) {
-        cart.push(name);
-        total += price;
-        document.getElementById('total-val').innerText = total;
-        // Feedback visual simples
-        const btn = event.target;
-        btn.innerText = "✅ Adicionado!";
-        setTimeout(() => { btn.innerText = "+ Adicionar ao Carrinho"; }, 800);
-    }
-
-    function checkout() {
-        if (cart.length === 0) {
-            alert("Adicione pelo menos um item!");
-            return;
+    <script>
+        let cart = []; let total = 0;
+        function add(n, p) { cart.push(n); total += p; document.getElementById('total').innerText = total; }
+        function checkout() {
+            if(cart.length === 0) return alert("Carrito vacío");
+            const msg = `*NUEVO PEDIDO*%0A*Items:* ${cart.join(", ")}%0A*Total:* $${total}`;
+            window.location.href = `whatsapp://send?phone=59891714945&text=${msg}`;
         }
-
-        const phone = "59891714945";
-        const itemsList = cart.join("\n- ");
-        const message = `*NUEVO PEDIDO - IPS SOURCE*%0A%0A*Items:*%0A- ${itemsList}%0A%0A*Total:* $${total}%0A%0A¿Me confirman el pedido?`;
-        
-        // Protocolo nativo para abrir o App
-        window.location.href = `whatsapp://send?phone=${phone}&text=${message}`;
-    }
-</script>
-
+    </script>
 </body>
 </html>
-

@@ -1,10 +1,9 @@
-
 <!DOCTYPE html>
 <html lang="es">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Menú - Pedidos Online</title>
+    <title>Menú Digital</title>
     <style>
         body { font-family: sans-serif; text-align: center; padding: 20px; background: #fdfdfd; }
         .card { background: white; padding: 20px; margin: 15px auto; border-radius: 15px; box-shadow: 0 4px 10px rgba(0,0,0,0.1); max-width: 350px; }
@@ -18,20 +17,21 @@
 </head>
 <body>
     <h1>🍕 Menú ips-source</h1>
-    <p>Toca para pedir por WhatsApp</p>
+    <p>Toca para abrir WhatsApp directamente</p>
     
     <div class="card">
         <h3>Pizza Margherita</h3>
         <p>Precio: $450</p>
-        <!-- API LINK: Más estable para evitar errores de DNS -->
-        <a class="btn-link" href="https://whatsapp.com">Pedir ahora</a>
+        <!-- Formato Nativo: whatsapp://send -->
+        <a class="btn-link" href="whatsapp://send?phone=59891714945&text=Hola!%20Quiero%20una%20Pizza%20Margherita">Pedir ahora</a>
     </div>
 
     <div class="card">
         <h3>Hamburguesa Doble</h3>
         <p>Precio: $350</p>
-        <a class="btn-link" href="https://whatsapp.com">Pedir ahora</a>
+        <a class="btn-link" href="whatsapp://send?phone=59891714945&text=Hola!%20Quiero%20una%20Hamburguesa%20Doble">Pedir ahora</a>
     </div>
 </body>
 </html>
+
 

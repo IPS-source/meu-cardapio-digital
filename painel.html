@@ -3,58 +3,67 @@
 <head>
     <meta charset="UTF-8">
     <title>Panel Cocina | IPS-Source</title>
-    <!-- Cargamos librerías con una versión más compatible -->
-    <script src="https://gstatic.com"></script>
-    <script src="https://gstatic.com"></script>
+    <!-- Usamos un CDN alternativo (Unpkg) en lugar del de Google -->
+    <script src="https://unpkg.com"></script>
+    <script src="https://unpkg.com"></script>
     <style>
-        body { font-family: 'Segoe UI', sans-serif; background: #000; color: #fff; padding: 20px; text-align: center; }
+        body { font-family: 'Segoe UI', sans-serif; background: #000; color: #fff; text-align: center; padding: 20px; }
         .grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); gap: 15px; text-align: left; }
         .card { background: white; color: #333; padding: 15px; border-radius: 12px; border-left: 8px solid #2ecc71; margin-bottom: 10px; }
-        #status-box { background: #333; padding: 10px; border-radius: 5px; margin-bottom: 20px; }
+        #status-box { background: #333; padding: 10px; border-radius: 5px; margin-bottom: 20px; font-weight: bold; }
         button.delete { background: #e74c3c; color: white; border: none; padding: 10px; width: 100%; border-radius: 5px; cursor: pointer; }
     </style>
 </head>
 <body>
 
     <h1>🚀 Panel de Pedidos IPS-Source</h1>
-    <div id="status-box">Sincronizando...</div>
+    <div id="status-box">Intentando conectar...</div>
 
     <div id="pedidos-lista" class="grid"></div>
     <audio id="alarma" src="https://mixkit.co"></audio>
 
     <script>
-        const config = { databaseURL: "https://ips-source-pedidos-default-rtdb.firebaseio.com/" };
+        // Tu configuración de Firebase
+        const config = { databaseURL: "https://ips-source-pedidos-default-rtdb.firebaseio.com" };
 
-        function checkFirebase() {
+        function iniciar() {
+            // Verificamos si las librerías cargaron
             if (typeof firebase === 'undefined') {
-                document.getElementById('status-box').innerHTML = "❌ ERROR: El navegador bloqueó a Google.<br>Prueba abrir el link en <b>MODO INCÓGNITO</b> o usa otro navegador.";
+                document.getElementById('status-box').innerHTML = "❌ ERROR CRÍTICO: Librerías bloqueadas.<br>Tu red está impidiendo la conexión a los servidores de datos.";
                 return;
             }
 
-            firebase.initializeApp(config);
-            const db = firebase.database();
-            document.getElementById('status-box').innerHTML = "✅ CONECTADO. Esperando pedidos...";
+            try {
+                if (!firebase.apps.length) {
+                    firebase.initializeApp(config);
+                }
+                const db = firebase.database();
+                document.getElementById('status-box').innerHTML = "✅ CONECTADO EXITOSAMENTE";
+                document.getElementById('status-box').style.background = "#27ae60";
 
-            db.ref('pedidos').on('child_added', (snap) => {
-                document.getElementById('status-box').style.display = 'none';
-                const p = snap.val();
-                document.getElementById('alarma').play().catch(() => {});
+                // Escuchar pedidos
+                db.ref('pedidos').on('child_added', (snap) => {
+                    const p = snap.val();
+                    document.getElementById('alarma').play().catch(() => {});
 
-                const div = document.createElement('div');
-                div.className = 'card';
-                div.id = snap.key;
-                div.innerHTML = `
-                    <small>${p.fecha}</small>
-                    <p><b>📱 Cliente:</b> ${p.cliente}</p>
-                    <p style="background:#f4f4f4; padding:8px; border-radius:5px;">${p.contenido.replace(/\n/g, '<br>')}</p>
-                    <button class="delete" onclick="borrar('${snap.key}')">MARCAR ENTREGADO</button>
-                `;
-                document.getElementById('pedidos-lista').prepend(div);
-            });
+                    const div = document.createElement('div');
+                    div.className = 'card';
+                    div.id = snap.key;
+                    div.innerHTML = `
+                        <small>${p.fecha || ''}</small>
+                        <p><b>📱 Cliente:</b> ${p.cliente || 'Nuevo'}</p>
+                        <p style="background:#f4f4f4; padding:8px; border-radius:5px;">${(p.contenido || '').replace(/\n/g, '<br>')}</p>
+                        <button class="delete" onclick="borrar('${snap.key}')">MARCAR ENTREGADO</button>
+                    `;
+                    document.getElementById('pedidos-lista').prepend(div);
+                });
+            } catch (e) {
+                document.getElementById('status-box').innerHTML = "❌ ERROR DE CONFIGURACIÓN: " + e.message;
+            }
         }
 
-        // Ejecutar después de un segundo para dar tiempo a la carga
-        setTimeout(checkFirebase, 1500);
+        // Ejecutar
+        setTimeout(iniciar, 1000);
 
         function borrar(id) {
             if(confirm("¿Pedido listo?")) {
@@ -64,3 +73,4 @@
     </script>
 </body>
 </html>
+

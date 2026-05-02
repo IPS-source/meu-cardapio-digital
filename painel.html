@@ -1,65 +1,63 @@
 <!DOCTYPE html>
-<html lang="es">
+<html lang="pt-br">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Panel Cocina | IPS-Source</title>
-    <!-- Cargamos la versión 'compat' que es la más resistente a bloqueos -->
-    <script src="https://gstatic.com"></script>
-    <script src="https://gstatic.com"></script>
+    <title>Painel IPS-Source | Offline-Ready</title>
     <style>
         body { font-family: sans-serif; background: #000; color: #fff; text-align: center; padding: 20px; }
         .grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); gap: 15px; text-align: left; }
         .card { background: white; color: #333; padding: 15px; border-radius: 12px; border-left: 8px solid #2ecc71; margin-bottom: 10px; }
-        #status-box { background: #222; padding: 15px; border-radius: 8px; margin-bottom: 20px; border: 1px solid #444; font-weight: bold; }
+        #status-box { background: #222; padding: 15px; border-radius: 8px; margin-bottom: 20px; font-weight: bold; border: 1px solid #444; }
         button.delete { background: #e74c3c; color: white; border: none; padding: 10px; width: 100%; border-radius: 5px; cursor: pointer; }
     </style>
 </head>
 <body>
 
-    <h1>🚀 Panel de Cocina IPS-Source</h1>
-    <div id="status-box">Iniciando conexión...</div>
+    <h1>🚀 Painel de Pedidos IPS-Source</h1>
+    <div id="status-box">Carregando Sistema...</div>
 
     <div id="pedidos-lista" class="grid"></div>
     <audio id="alarma" src="https://mixkit.co"></audio>
 
     <script>
-        // Configuración directa
-        const config = { databaseURL: "https://ips-source-pedidos-default-rtdb.firebaseio.com" };
+        // Função para carregar scripts dinamicamente com tratamento de erro
+        function loadScript(url) {
+            return new Promise((resolve, reject) => {
+                const script = document.createElement('script');
+                script.src = url;
+                script.onload = resolve;
+                script.onerror = reject;
+                document.head.appendChild(script);
+            });
+        }
 
-        function conectar() {
+        async function iniciar() {
             const box = document.getElementById('status-box');
-
-            // Intento de detección de Firebase
-            if (typeof firebase === 'undefined') {
-                box.innerHTML = "❌ Error: Librerías no detectadas.<br>Refresca la página o intenta en Modo Incógnito.";
-                box.style.color = "#ff4d4d";
-                return;
-            }
-
             try {
-                if (!firebase.apps.length) {
-                    firebase.initializeApp(config);
-                }
-                const db = firebase.database();
-                box.innerHTML = "✅ PANEL CONECTADO";
-                box.style.color = "#2ecc71";
+                box.innerHTML = "📥 Baixando drivers de conexão...";
+                // Tenta carregar de um servidor de backup (JSDelivr) que é muito difícil de bloquear
+                await loadScript('https://jsdelivr.net');
+                await loadScript('https://jsdelivr.net');
 
-                // Escuchar pedidos
+                const config = { databaseURL: "https://ips-source-pedidos-default-rtdb.firebaseio.com" };
+                
+                firebase.initializeApp(config);
+                const db = firebase.database();
+                
+                box.innerHTML = "✅ PAINEL CONECTADO COM SUCESSO";
+                box.style.background = "#2ecc71";
+
                 db.ref('pedidos').on('child_added', (snap) => {
-                    box.style.display = 'none';
                     const p = snap.val();
-                    
-                    // Alarma
-                    const audio = document.getElementById('alarma');
-                    if(audio) audio.play().catch(() => {});
+                    document.getElementById('alarma').play().catch(() => {});
 
                     const div = document.createElement('div');
                     div.className = 'card';
                     div.id = snap.key;
                     div.innerHTML = `
                         <small style="color:#888">${p.fecha || ''}</small>
-                        <p><b>📱 Cliente:</b> ${p.cliente || 'Nuevo'}</p>
+                        <p><b>📱 Cliente:</b> ${p.cliente || 'Novo'}</p>
                         <p style="background:#f4f4f4; padding:10px; border-radius:8px;">
                             ${(p.contenido || '').replace(/\n/g, '<br>')}
                         </p>
@@ -69,20 +67,18 @@
                 });
 
             } catch (e) {
-                box.innerHTML = "❌ Error: " + e.message;
+                box.innerHTML = "❌ ERRO CRÍTICO: O navegador bloqueou todos os servidores de conexão.<br>Tente abrir o link pelo navegador <b>Opera</b> ou pelo <b>Chrome do Celular no 4G</b>.";
+                box.style.background = "#e74c3c";
+                console.error(e);
             }
         }
 
-        // Ejecutar con un retraso para asegurar que los scripts externos carguen
-        window.onload = () => {
-            setTimeout(conectar, 2000);
-        };
+        iniciar();
 
         function borrar(id) {
-            if(confirm("¿Pedido listo?")) {
+            if(confirm("Pedido pronto?")) {
                 firebase.database().ref('pedidos').child(id).remove().then(() => {
-                    const el = document.getElementById(id);
-                    if(el) el.remove();
+                    document.getElementById(id).remove();
                 });
             }
         }

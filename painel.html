@@ -3,40 +3,35 @@
 <head>
     <meta charset="UTF-8">
     <title>Panel Cocina | IPS-Source</title>
-    <!-- Cargamos Firebase desde un servidor de respaldo diferente -->
-    <script src="https://gstatic.com"></script>
-    <script src="https://gstatic.com"></script>
+    <!-- Cargamos librerías desde Cloudflare (Alternativa a Google) -->
+    <script src="https://cloudflare.com"></script>
+    <script src="https://cloudflare.com"></script>
     <style>
-        body { font-family: 'Segoe UI', sans-serif; background: #000; color: #fff; text-align: center; padding: 20px; }
+        body { font-family: sans-serif; background: #000; color: #fff; text-align: center; padding: 20px; }
         .grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); gap: 15px; text-align: left; }
-        .card { background: white; color: #333; padding: 15px; border-radius: 12px; border-left: 8px solid #2ecc71; margin-bottom: 10px; box-shadow: 0 4px 10px rgba(255,255,255,0.1); }
+        .card { background: white; color: #333; padding: 15px; border-radius: 12px; border-left: 8px solid #2ecc71; margin-bottom: 10px; }
         #status-box { background: #222; padding: 15px; border-radius: 8px; margin-bottom: 20px; border: 1px solid #444; }
-        button.delete { background: #e74c3c; color: white; border: none; padding: 10px; width: 100%; border-radius: 5px; cursor: pointer; font-weight: bold; }
-        .loading { color: #f1c40f; font-weight: bold; }
+        button.delete { background: #e74c3c; color: white; border: none; padding: 10px; width: 100%; border-radius: 5px; cursor: pointer; }
     </style>
 </head>
 <body>
 
     <h1>🚀 Panel de Pedidos IPS-Source</h1>
-    <div id="status-box">
-        <span id="status-text" class="loading">Iniciando conexión...</span>
-    </div>
+    <div id="status-box">Intentando conectar con la nube...</div>
 
     <div id="pedidos-lista" class="grid"></div>
-    
-    <!-- Sonido de Alerta -->
-    <audio id="alarma" src="https://mixkit.co" preload="auto"></audio>
+    <audio id="alarma" src="https://mixkit.co"></audio>
 
     <script>
-        // Tu configuración exacta
         const config = { databaseURL: "https://ips-source-pedidos-default-rtdb.firebaseio.com/" };
 
         function conectar() {
-            const statusText = document.getElementById('status-text');
+            const statusBox = document.getElementById('status-box');
             
+            // Verificamos si la librería de Cloudflare cargó
             if (typeof firebase === 'undefined') {
-                statusText.innerHTML = "❌ ERROR: Librerías no cargadas.<br>Por favor, intenta abrir este link en <b>Google Chrome</b> (no Brave/Edge).";
-                statusText.style.color = "#e74c3c";
+                statusBox.innerHTML = "❌ ERROR: Librerías bloqueadas en Cloudflare también.<br>Tu internet está bloqueando los servicios de bases de datos.";
+                statusBox.style.color = "#e74c3c";
                 return;
             }
 
@@ -46,25 +41,20 @@
                 }
                 const db = firebase.database();
                 
-                statusText.innerHTML = "✅ PANEL CONECTADO - Esperando pedidos...";
-                statusText.className = "";
-                statusText.style.color = "#2ecc71";
+                statusBox.innerHTML = "✅ PANEL CONECTADO - Esperando pedidos...";
+                statusBox.style.color = "#2ecc71";
 
-                // Escuchar pedidos
                 db.ref('pedidos').on('child_added', (snap) => {
                     const p = snap.val();
-                    
-                    // Intentar sonar alarma
-                    const audio = document.getElementById('alarma');
-                    audio.play().catch(() => console.log("Clic en la pantalla para activar sonido"));
+                    document.getElementById('alarma').play().catch(() => {});
 
                     const div = document.createElement('div');
                     div.className = 'card';
                     div.id = snap.key;
                     div.innerHTML = `
-                        <div style="font-size:0.7em; color:#888; margin-bottom:5px;">${p.fecha || ''}</div>
+                        <small style="color:#888;">${p.fecha || ''}</small>
                         <p><b>📱 Cliente:</b> ${p.cliente || 'Nuevo'}</p>
-                        <p style="background:#f4f4f4; padding:10px; border-radius:8px; font-size:0.9em; line-height:1.4;">
+                        <p style="background:#f4f4f4; padding:10px; border-radius:8px;">
                             ${(p.contenido || '').replace(/\n/g, '<br>')}
                         </p>
                         <button class="delete" onclick="borrar('${snap.key}')">MARCAR ENTREGADO</button>
@@ -73,22 +63,16 @@
                 });
 
             } catch (e) {
-                statusText.innerHTML = "❌ ERROR DE CONFIGURACIÓN: " + e.message;
-                statusText.style.color = "#e74c3c";
+                statusBox.innerHTML = "❌ ERROR: " + e.message;
             }
         }
 
-        // Ejecutar después de que cargue la página
-        window.onload = () => {
-            setTimeout(conectar, 2000);
-        };
+        // Ejecutar después de 1 segundo
+        setTimeout(conectar, 1500);
 
         function borrar(id) {
             if(confirm("¿Pedido entregado?")) {
-                firebase.database().ref('pedidos').child(id).remove().then(() => {
-                    const el = document.getElementById(id);
-                    if(el) el.remove();
-                });
+                firebase.database().ref('pedidos').child(id).remove().then(() => document.getElementById(id).remove());
             }
         }
     </script>

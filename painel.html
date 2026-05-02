@@ -2,36 +2,38 @@
 <html lang="es">
 <head>
     <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Panel Cocina | IPS-Source</title>
-    <!-- Cargamos librerías desde Cloudflare (Alternativa a Google) -->
-    <script src="https://cloudflare.com"></script>
-    <script src="https://cloudflare.com"></script>
+    <!-- Cargamos la versión 'compat' que es la más resistente a bloqueos -->
+    <script src="https://gstatic.com"></script>
+    <script src="https://gstatic.com"></script>
     <style>
         body { font-family: sans-serif; background: #000; color: #fff; text-align: center; padding: 20px; }
         .grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); gap: 15px; text-align: left; }
         .card { background: white; color: #333; padding: 15px; border-radius: 12px; border-left: 8px solid #2ecc71; margin-bottom: 10px; }
-        #status-box { background: #222; padding: 15px; border-radius: 8px; margin-bottom: 20px; border: 1px solid #444; }
+        #status-box { background: #222; padding: 15px; border-radius: 8px; margin-bottom: 20px; border: 1px solid #444; font-weight: bold; }
         button.delete { background: #e74c3c; color: white; border: none; padding: 10px; width: 100%; border-radius: 5px; cursor: pointer; }
     </style>
 </head>
 <body>
 
-    <h1>🚀 Panel de Pedidos IPS-Source</h1>
-    <div id="status-box">Intentando conectar con la nube...</div>
+    <h1>🚀 Panel de Cocina IPS-Source</h1>
+    <div id="status-box">Iniciando conexión...</div>
 
     <div id="pedidos-lista" class="grid"></div>
     <audio id="alarma" src="https://mixkit.co"></audio>
 
     <script>
-        const config = { databaseURL: "https://ips-source-pedidos-default-rtdb.firebaseio.com/" };
+        // Configuración directa
+        const config = { databaseURL: "https://ips-source-pedidos-default-rtdb.firebaseio.com" };
 
         function conectar() {
-            const statusBox = document.getElementById('status-box');
-            
-            // Verificamos si la librería de Cloudflare cargó
+            const box = document.getElementById('status-box');
+
+            // Intento de detección de Firebase
             if (typeof firebase === 'undefined') {
-                statusBox.innerHTML = "❌ ERROR: Librerías bloqueadas en Cloudflare también.<br>Tu internet está bloqueando los servicios de bases de datos.";
-                statusBox.style.color = "#e74c3c";
+                box.innerHTML = "❌ Error: Librerías no detectadas.<br>Refresca la página o intenta en Modo Incógnito.";
+                box.style.color = "#ff4d4d";
                 return;
             }
 
@@ -40,19 +42,23 @@
                     firebase.initializeApp(config);
                 }
                 const db = firebase.database();
-                
-                statusBox.innerHTML = "✅ PANEL CONECTADO - Esperando pedidos...";
-                statusBox.style.color = "#2ecc71";
+                box.innerHTML = "✅ PANEL CONECTADO";
+                box.style.color = "#2ecc71";
 
+                // Escuchar pedidos
                 db.ref('pedidos').on('child_added', (snap) => {
+                    box.style.display = 'none';
                     const p = snap.val();
-                    document.getElementById('alarma').play().catch(() => {});
+                    
+                    // Alarma
+                    const audio = document.getElementById('alarma');
+                    if(audio) audio.play().catch(() => {});
 
                     const div = document.createElement('div');
                     div.className = 'card';
                     div.id = snap.key;
                     div.innerHTML = `
-                        <small style="color:#888;">${p.fecha || ''}</small>
+                        <small style="color:#888">${p.fecha || ''}</small>
                         <p><b>📱 Cliente:</b> ${p.cliente || 'Nuevo'}</p>
                         <p style="background:#f4f4f4; padding:10px; border-radius:8px;">
                             ${(p.contenido || '').replace(/\n/g, '<br>')}
@@ -63,16 +69,21 @@
                 });
 
             } catch (e) {
-                statusBox.innerHTML = "❌ ERROR: " + e.message;
+                box.innerHTML = "❌ Error: " + e.message;
             }
         }
 
-        // Ejecutar después de 1 segundo
-        setTimeout(conectar, 1500);
+        // Ejecutar con un retraso para asegurar que los scripts externos carguen
+        window.onload = () => {
+            setTimeout(conectar, 2000);
+        };
 
         function borrar(id) {
-            if(confirm("¿Pedido entregado?")) {
-                firebase.database().ref('pedidos').child(id).remove().then(() => document.getElementById(id).remove());
+            if(confirm("¿Pedido listo?")) {
+                firebase.database().ref('pedidos').child(id).remove().then(() => {
+                    const el = document.getElementById(id);
+                    if(el) el.remove();
+                });
             }
         }
     </script>

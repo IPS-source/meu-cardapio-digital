@@ -6,197 +6,81 @@
     <title>Menú Digital | Aceguá Byte</title>
     <link href="https://googleapis.com" rel="stylesheet">
     <style>
-        :root {
-            --azul-electrico: #007bff;
-            --negro-fondo: #121212;
-            --gris-card: #1e1e1e;
-            --blanco: #ffffff;
-        }
-
-        body {
-            font-family: 'Poppins', sans-serif;
-            background-color: var(--negro-fondo);
-            color: var(--blanco);
-            margin: 0;
-            padding-bottom: 100px;
-        }
-
-        header {
-            background: linear-gradient(rgba(0,0,0,0.8), rgba(0,0,0,0.8)), url('https://unsplash.com');
-            background-size: cover;
-            background-position: center;
-            padding: 30px 20px;
-            text-align: center;
-            border-bottom: 3px solid var(--azul-electrico);
-        }
-
-        .logo-text {
-            font-size: 24px;
-            font-weight: 600;
-            letter-spacing: 2px;
-            color: var(--azul-electrico);
-            margin: 0;
-        }
-
-        .categoria-label {
-            padding: 15px;
-            font-size: 18px;
-            font-weight: 600;
-            color: var(--azul-electrico);
-        }
-
-        .menu-container {
-            display: grid;
-            grid-template-columns: 1fr;
-            gap: 15px;
-            padding: 0 15px;
-        }
-
-        .producto-card {
-            background: var(--gris-card);
-            border-radius: 12px;
-            display: flex;
-            overflow: hidden;
-            box-shadow: 0 4px 10px rgba(0,0,0,0.3);
-        }
-
-        .producto-img {
-            width: 90px;
-            height: 90px;
-            background-size: cover;
-            background-position: center;
-        }
-
-        .producto-info {
-            padding: 10px;
-            flex: 1;
-        }
-
-        .producto-titulo { margin: 0; font-size: 15px; font-weight: 600; }
-        .producto-precio { color: var(--azul-electrico); font-weight: 600; display: block; margin-top: 5px; }
-
-        .btn-add {
-            background: var(--azul-electrico);
-            color: white;
-            border: none;
-            border-radius: 5px;
-            padding: 5px 12px;
-            font-weight: bold;
-            cursor: pointer;
-            float: right;
-        }
-
-        /* BOTÓN FLOTANTE CORREGIDO */
+        :root { --azul: #007bff; --bg: #121212; --card: #1e1e1e; }
+        body { font-family: 'Poppins', sans-serif; background: var(--bg); color: white; margin: 0; padding-bottom: 100px; }
+        header { background: #000; padding: 30px; text-align: center; border-bottom: 3px solid var(--azul); }
+        .logo { color: var(--azul); font-weight: 600; font-size: 24px; margin: 0; letter-spacing: 2px; }
+        .categoria { padding: 20px; font-weight: 600; color: var(--azul); }
+        .card { background: var(--card); margin: 0 15px 15px; border-radius: 12px; display: flex; overflow: hidden; }
+        .img { width: 90px; height: 90px; background-size: cover; }
+        .info { padding: 10px; flex: 1; }
+        .precio { color: var(--azul); font-weight: 600; }
+        .btn-add { background: var(--azul); color: white; border: none; padding: 5px 15px; border-radius: 5px; float: right; cursor: pointer; }
+        
+        /* O BOTÃO QUE VOCÊ VALIDOU */
         .cart-float {
-            position: fixed;
-            bottom: 20px;
-            left: 50%;
-            transform: translateX(-50%);
-            background: var(--azul-electrico);
-            color: white;
-            width: 85%;
-            padding: 18px;
-            border-radius: 50px;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            font-weight: 600;
-            box-shadow: 0 8px 20px rgba(0,123,255,0.5);
-            z-index: 999;
-            cursor: pointer; /* Indica que es clickeable */
-            border: none;
+            position: fixed; bottom: 20px; left: 50%; transform: translateX(-50%);
+            background: var(--azul); color: white; width: 85%; padding: 20px;
+            border-radius: 50px; display: flex; justify-content: space-between;
+            font-weight: 600; box-shadow: 0 8px 20px rgba(0,123,255,0.5);
+            border: none; cursor: pointer; z-index: 9999;
         }
     </style>
 </head>
 <body>
 
 <header>
-    <p class="logo-text">ACEGUÁ BYTE</p>
-    <p style="margin:5px 0 0; font-size:12px; color: #ccc;">Menú Auto-Gestionado</p>
+    <p class="logo">ACEGUÁ BYTE</p>
 </header>
 
-<div class="categoria-label">🍔 Hamburguesas</div>
+<div class="categoria">🍔 Hamburguesas</div>
 
-<div class="menu-container">
-    <div class="producto-card">
-        <div class="producto-img" style="background-image: url('https://images.unsplash.com/photo-1586190848861-99aa4a171e90?q=80&w=880&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D');"></div>
-        <div class="producto-info">
-            <p class="producto-titulo">X-Salada Especial</p>
-            <span class="producto-precio">R$ 25,00</span>
-            <button class="btn-add" onclick="agregar('X-Salada', 25)">Añadir +</button>
+<div id="productos">
+    <div class="card">
+        <div class="img" style="background-image: url('https://unsplash.com');"></div>
+        <div class="info">
+            <b>X-Salada</b><br><span class="precio">R$ 25,00</span>
+            <button class="btn-add" onclick="add('X-Salada', 25)">+</button>
         </div>
     </div>
-
-    <div class="producto-card" style="margin-top:10px;">
-        <div class="producto-img" style="background-image: url('https://unsplash.com');"></div>
-        <div class="producto-info">
-            <p class="producto-titulo">X-Bacon Turbo</p>
-            <span class="producto-precio">R$ 32,00</span>
-            <button class="btn-add" onclick="agregar('X-Bacon', 32)">Añadir +</button>
+    <div class="card">
+        <div class="img" style="background-image: url('https://unsplash.com');"></div>
+        <div class="info">
+            <b>X-Bacon</b><br><span class="precio">R$ 32,00</span>
+            <button class="btn-add" onclick="add('X-Bacon', 32)">+</button>
         </div>
     </div>
 </div>
 
-<!-- BOTÓN FLOTANTE: Estructura de enlace puro -->
-<a id="btn-final" href="#" target="_blank" class="cart-float" style="text-decoration: none; display: none;">
-    <span>🛒 ENVIAR PEDIDO</span>
-    <span id="total-flotante">R$ 0,00</span>
-</a>
+<button class="cart-float" onclick="enviar()">
+    <span>🛒 Ver Carrito</span>
+    <span id="total">R$ 0,00</span>
+</button>
 
 <script>
     let total = 0;
-    let pedido = [];
-    const NUMERO_WHATSAPP = "59891714945"; 
+    let itens = [];
+    const FONE = "59891714945";
 
-    function agregar(nombre, precio) {
-        total += precio;
-        pedido.push(nombre);
-        
-        // Actualizar visualmente el precio
-        document.getElementById('total-flotante').innerText = "R$ " + total.toFixed(2).replace('.', ',');
-        
-        // Mostrar el botón si estaba oculto
-        const boton = document.getElementById('btn-final');
-        boton.style.display = 'flex';
-
-        // ARMAR EL LINK EN TIEMPO REAL
-        let listaItens = "";
-        pedido.forEach(item => {
-            listaItens += "- " + item + "%0A"; // %0A es el salto de línea en URL
-        });
-
-        const mensaje = "*🚀 NUEVO PEDIDO - ACEGUÁ BYTE*%0A%0A" +
-                        "*Productos:*%0A" + listaItens + "%0A" +
-                        "*Total: R$ " + total.toFixed(2).replace('.', ',') + "*";
-
-        // Seteamos el atributo href directamente en el botón
-        boton.href = "https://whatsapp.com" + NUMERO_WHATSAPP + "&text=" + mensaje;
+    function add(nome, preco) {
+        total += preco;
+        itens.push(nome);
+        document.getElementById('total').innerText = "R$ " + total.toFixed(2).replace('.', ',');
     }
 
-    // Eliminamos la función enviarPedido() porque el botón ya tiene el link puesto
+    function enviar() {
+        if (itens.length === 0) return alert("Carrito vacío");
+
+        // Voltando para a estrutura simples de string que você usava
+        let lista = itens.join('\n- ');
+        let msg = "*ACEGUÁ BYTE - PEDIDO*\n\n" + "- " + lista + "\n\n*Total: R$ " + total.toFixed(2) + "*";
+        
+        // A solução que funcionava: usar o link direto no href
+        let link = "https://wa.me" + FONE + "?text=" + encodeURIComponent(msg);
+        
+        window.location.href = link;
+    }
 </script>
-
-<style>
-    /* Aseguramos que el botón se vea bien como flex */
-    .cart-float {
-        position: fixed;
-        bottom: 20px;
-        left: 50%;
-        transform: translateX(-50%);
-        background: #007bff;
-        color: white;
-        width: 85%;
-        padding: 18px;
-        border-radius: 50px;
-        display: flex; /* Se cambia por JS a 'flex' */
-        justify-content: space-between;
-        align-items: center;
-        font-weight: 600;
-        box-shadow: 0 8px 20px rgba(0,123,255,0.5);
-        z-index: 999;
-    }
-</style>
-
 
 </body>
 </html>

@@ -1,9 +1,9 @@
 <!DOCTYPE html>
-<html lang="pt-br">
+<html lang="es">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Cardápio Digital | Aceguá Byte</title>
+    <title>Menú Digital | Aceguá Byte</title>
     <link href="https://googleapis.com" rel="stylesheet">
     <style>
         :root {
@@ -18,7 +18,7 @@
             background-color: var(--negro-fondo);
             color: var(--blanco);
             margin: 0;
-            padding-bottom: 90px;
+            padding-bottom: 100px;
         }
 
         header {
@@ -31,7 +31,7 @@
         }
 
         .logo-text {
-            font-size: 26px;
+            font-size: 24px;
             font-weight: 600;
             letter-spacing: 2px;
             color: var(--azul-electrico);
@@ -43,14 +43,13 @@
             font-size: 18px;
             font-weight: 600;
             color: var(--azul-electrico);
-            background: rgba(0,123,255,0.05);
         }
 
         .menu-container {
             display: grid;
             grid-template-columns: 1fr;
             gap: 15px;
-            padding: 15px;
+            padding: 0 15px;
         }
 
         .producto-card {
@@ -58,50 +57,36 @@
             border-radius: 12px;
             display: flex;
             overflow: hidden;
-            box-shadow: 0 4px 10px rgba(0,0,0,0.5);
+            box-shadow: 0 4px 10px rgba(0,0,0,0.3);
         }
 
         .producto-img {
-            width: 100px;
-            height: 100px;
+            width: 90px;
+            height: 90px;
             background-size: cover;
             background-position: center;
         }
 
         .producto-info {
-            padding: 12px;
+            padding: 10px;
             flex: 1;
         }
 
-        .producto-titulo {
-            margin: 0;
-            font-size: 16px;
-            font-weight: 600;
-        }
-
-        .producto-desc {
-            font-size: 11px;
-            color: #aaa;
-            margin: 4px 0;
-        }
-
-        .producto-precio {
-            color: var(--azul-electrico);
-            font-weight: 600;
-            font-size: 17px;
-        }
+        .producto-titulo { margin: 0; font-size: 15px; font-weight: 600; }
+        .producto-precio { color: var(--azul-electrico); font-weight: 600; display: block; margin-top: 5px; }
 
         .btn-add {
             background: var(--azul-electrico);
             color: white;
             border: none;
-            border-radius: 8px;
+            border-radius: 5px;
             padding: 5px 12px;
             font-weight: bold;
             cursor: pointer;
+            float: right;
         }
 
-        /* Carrinho Flutuante */
+        /* BOTÓN FLOTANTE CORREGIDO */
         .cart-float {
             position: fixed;
             bottom: 20px;
@@ -110,15 +95,16 @@
             background: var(--azul-electrico);
             color: white;
             width: 85%;
-            padding: 16px;
-            border-radius: 12px;
+            padding: 18px;
+            border-radius: 50px;
             display: flex;
             justify-content: space-between;
             align-items: center;
             font-weight: 600;
-            box-shadow: 0 8px 20px rgba(0,0,0,0.6);
-            z-index: 1000;
-            cursor: pointer;
+            box-shadow: 0 8px 20px rgba(0,123,255,0.5);
+            z-index: 999;
+            cursor: pointer; /* Indica que es clickeable */
+            border: none;
         }
     </style>
 </head>
@@ -126,85 +112,72 @@
 
 <header>
     <p class="logo-text">ACEGUÁ BYTE</p>
-    <p style="margin:5px 0 0; font-size:12px; color: #ddd;">Cardápio Digital Inteligente</p>
+    <p style="margin:5px 0 0; font-size:12px; color: #ccc;">Menú Auto-Gestionado</p>
 </header>
 
 <div class="categoria-label">🍔 Hamburguesas</div>
 
 <div class="menu-container">
-    <!-- Exemplo 1 -->
     <div class="producto-card">
         <div class="producto-img" style="background-image: url('https://unsplash.com');"></div>
         <div class="producto-info">
-            <p class="producto-titulo">X-Salada Clásico</p>
-            <p class="producto-desc">Pão, carne, queijo, alface, tomate e maionese.</p>
-            <div style="display:flex; justify-content: space-between; align-items: center; margin-top: 8px;">
-                <span class="producto-precio">R$ 22,00</span>
-                <button class="btn-add" onclick="agregar('X-Salada', 22)">Adicionar</button>
-            </div>
+            <p class="producto-titulo">X-Salada Especial</p>
+            <span class="producto-precio">R$ 25,00</span>
+            <button class="btn-add" onclick="agregar('X-Salada', 25)">Añadir +</button>
         </div>
     </div>
 
-    <!-- Exemplo 2 -->
-    <div class="producto-card">
+    <div class="producto-card" style="margin-top:10px;">
         <div class="producto-img" style="background-image: url('https://unsplash.com');"></div>
         <div class="producto-info">
-            <p class="producto-titulo">X-Bacon Especial</p>
-            <p class="producto-desc">Muita carne, muito bacon e muito queijo.</p>
-            <div style="display:flex; justify-content: space-between; align-items: center; margin-top: 8px;">
-                <span class="producto-precio">R$ 28,00</span>
-                <button class="btn-add" onclick="agregar('X-Bacon', 28)">Adicionar</button>
-            </div>
+            <p class="producto-titulo">X-Bacon Turbo</p>
+            <span class="producto-precio">R$ 32,00</span>
+            <button class="btn-add" onclick="agregar('X-Bacon', 32)">Añadir +</button>
         </div>
     </div>
 </div>
 
-<div class="cart-float" id="btn-carrinho" onclick="enviarPedido()">
-    <span>🛒 Finalizar Pedido</span>
+<!-- EL BOTÓN AHORA TIENE ONCLICK DIRECTO -->
+<div class="cart-float" id="btn-carrito" onclick="enviarPedido()">
+    <span>🛒 Ver Carrito</span>
     <span id="total-flotante">R$ 0,00</span>
 </div>
 
 <script>
     let total = 0;
-    let itensPedido = [];
-    const MEU_NUMERO = "59891714945"; // Seu número configurado
+    let pedido = [];
+    const NUMERO_WHATSAPP = "59891714945"; 
 
     function agregar(nombre, precio) {
         total += precio;
-        itensPedido.push(nombre);
+        pedido.push(nombre);
         document.getElementById('total-flotante').innerText = "R$ " + total.toFixed(2).replace('.', ',');
-        
-        // Efeito simples de feedback
-        const btn = document.getElementById('btn-carrinho');
-        btn.style.transform = "translateX(-50%) scale(1.05)";
-        setTimeout(() => { btn.style.transform = "translateX(-50%) scale(1)"; }, 200);
+        console.log("Carrito:", pedido);
     }
 
     function enviarPedido() {
-        if (itensPedido.length === 0) {
-            alert("Seu carrinho está vazio!");
+        console.log("Intentando enviar pedido...");
+        
+        if (pedido.length === 0) {
+            alert("El carrito está vacío. Añade algún producto.");
             return;
         }
 
-        // Formata a lista de itens para o texto
-        let listaTexto = "";
-        itensPedido.forEach(item => {
-            listaTexto += "- " + item + "\n";
+        let listaItens = "";
+        pedido.forEach(item => {
+            listaItens += "- " + item + "\n";
         });
 
-        // Monta a mensagem para o WhatsApp
-        const mensagemFinal = "*🚀 NOVO PEDIDO - ACEGUÁ BYTE*\n\n" +
-                              "*Itens:*\n" + listaTexto + "\n" +
-                              "*Total: R$ " + total.toFixed(2).replace('.', ',') + "*\n\n" +
-                              "Pode confirmar o pedido?";
+        const mensaje = "*🚀 NUEVO PEDIDO - ACEGUÁ BYTE*\n\n" +
+                        "*Productos:*\n" + listaItens + "\n" +
+                        "*Total: R$ " + total.toFixed(2).replace('.', ',') + "*\n\n" +
+                        "¿Podrían confirmar el pedido?";
 
-        const textoCodificado = encodeURIComponent(mensagemFinal);
-        
-        // Link direto oficial sem chaves ou caracteres que causam erro de DNS
-        const linkWhatsapp = "https://whatsapp.com" + MEU_NUMERO + "&text=" + textoCodificado;
+        const mensajeEncoded = encodeURIComponent(mensaje);
+        const urlFinal = "https://whatsapp.com" + NUMERO_WHATSAPP + "&text=" + mensajeEncoded;
 
-        // Redireciona
-        window.location.href = linkWhatsapp;
+        console.log("Redirigiendo a:", urlFinal);
+        window.location.href = urlFinal;
     }
 </script>
 

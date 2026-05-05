@@ -177,20 +177,47 @@
     let total = 0;
     let pedido = [];
 
+    // Substitua pelo número do WhatsApp do seu cliente (com código do país e DDD)
+    // Exemplo: 5553999999999 (Brasil + DDD 53 + Número)
+    const NUMERO_WHATSAPP = "5553999999999"; 
+
     function agregar(nombre, precio) {
         total += precio;
         pedido.push(nombre);
+        
+        // Atualiza o texto do botão flutuante
         document.getElementById('total-flotante').innerText = "R$ " + total.toFixed(2).replace('.', ',');
-        alert(nombre + " añadido al carrito");
+        
+        // Feedback visual simples
+        console.log("Añadido: " + nombre);
     }
 
     function enviarPedido() {
-        if(pedido.length === 0) return alert("¡Tu carrito está vacío!");
+        if(pedido.length === 0) {
+            alert("¡Tu carrito está vacío! Selecciona algún producto primero.");
+            return;
+        }
         
-        const texto = `¡Hola! Quiero hacer un pedido:\n- ${pedido.join('\n- ')}\n\n*Total: R$ ${total.toFixed(2)}*`;
-        const encoded = encodeURIComponent(texto);
-        // Redirige al WhatsApp del negocio
-        window.location.href = `https://wa.me{59891714945}`;
+        // 1. Criamos a lista de itens para a mensagem
+        let listaItens = "";
+        pedido.forEach(item => {
+            listaItens += `- ${item}\n`;
+        });
+
+        // 2. Montamos a mensagem final profissional
+        const mensaje = `*🚀 NOVO PEDIDO - ACEGUÁ BYTE*\n\n` +
+                        `*Itens:*\n${listaItens}\n` +
+                        `*Total: R$ ${total.toFixed(2).replace('.', ',')}*\n\n` +
+                        `Pode confirmar o pedido?`;
+
+        // 3. Codificamos a mensagem para URL
+        const mensajeEncoded = encodeURIComponent(mensaje);
+        
+        // 4. Criamos o link final
+        const urlWhatsApp = `https://wa.me{59891714945}?text=${mensajeEncoded}`;
+
+        // 5. Redirecionamos o usuário
+        window.location.href = urlWhatsApp;
     }
 </script>
 

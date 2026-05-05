@@ -3,39 +3,196 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Menú IPS-Source</title>
+    <title>Menú Digital | Aceguá Byte</title>
+    <!-- Google Fonts para un look moderno -->
+    <link href="https://googleapis.com" rel="stylesheet">
     <style>
-        body { font-family: sans-serif; text-align: center; padding: 20px; background: #f4f4f4; }
-        .card { background: white; border-radius: 15px; padding: 15px; margin: 15px auto; max-width: 350px; box-shadow: 0 4px 8px rgba(0,0,0,0.1); }
-        .btn-add { background: #e74c3c; color: white; border: none; padding: 10px 20px; border-radius: 5px; cursor: pointer; }
-        .footer { position: fixed; bottom: 0; left: 0; right: 0; background: white; padding: 20px; border-top: 2px solid #ddd; }
-        .btn-finalizar { background: #25d366; color: white; border: none; padding: 15px 30px; border-radius: 30px; font-weight: bold; width: 100%; text-decoration: none; display: block; }
+        :root {
+            --azul-electrico: #007bff;
+            --negro-fondo: #121212;
+            --gris-card: #1e1e1e;
+            --blanco: #ffffff;
+        }
+
+        body {
+            font-family: 'Poppins', sans-serif;
+            background-color: var(--negro-fondo);
+            color: var(--blanco);
+            margin: 0;
+            padding-bottom: 80px; /* Espacio para el botón flotante */
+        }
+
+        header {
+            background: linear-gradient(rgba(0,0,0,0.7), rgba(0,0,0,0.7)), url('https://unsplash.com');
+            background-size: cover;
+            background-position: center;
+            padding: 40px 20px;
+            text-align: center;
+            border-bottom: 3px solid var(--azul-electrico);
+        }
+
+        .logo-text {
+            font-size: 24px;
+            font-weight: 600;
+            letter-spacing: 2px;
+            color: var(--azul-electrico);
+            margin: 0;
+        }
+
+        .categoria-label {
+            padding: 15px;
+            font-size: 18px;
+            font-weight: 600;
+            color: var(--azul-electrico);
+            border-bottom: 1px solid #333;
+        }
+
+        .menu-container {
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 15px;
+            padding: 15px;
+        }
+
+        .producto-card {
+            background: var(--gris-card);
+            border-radius: 15px;
+            display: flex;
+            overflow: hidden;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.3);
+            transition: transform 0.2s;
+        }
+
+        .producto-card:active { transform: scale(0.98); }
+
+        .producto-img {
+            width: 100px;
+            height: 100px;
+            background-size: cover;
+            background-position: center;
+        }
+
+        .producto-info {
+            padding: 12px;
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+        }
+
+        .producto-titulo {
+            margin: 0;
+            font-size: 16px;
+            font-weight: 600;
+        }
+
+        .producto-desc {
+            font-size: 12px;
+            color: #aaa;
+            margin: 5px 0;
+        }
+
+        .producto-precio {
+            color: var(--azul-electrico);
+            font-weight: 600;
+            font-size: 18px;
+        }
+
+        .btn-add {
+            background: var(--azul-electrico);
+            color: white;
+            border: none;
+            border-radius: 50%;
+            width: 35px;
+            height: 35px;
+            font-size: 20px;
+            font-weight: bold;
+            cursor: pointer;
+            align-self: flex-end;
+        }
+
+        /* Carrito Flotante */
+        .cart-float {
+            position: fixed;
+            bottom: 20px;
+            left: 50%;
+            transform: translateX(-50%);
+            background: var(--azul-electrico);
+            color: white;
+            width: 90%;
+            padding: 15px;
+            border-radius: 50px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            font-weight: 600;
+            box-shadow: 0 10px 25px rgba(0,123,255,0.4);
+            z-index: 100;
+        }
     </style>
 </head>
 <body>
-    <h1>🍕 Nuestro Menú</h1>
-    <div class="card">
-        <h3>Pizza Margherita</h3><p>$ 450</p>
-        <button class="btn-add" onclick="add('Pizza Margherita', 450)">Agregar</button>
-    </div>
-    <div class="card">
-        <h3>Hamburguesa Doble</h3><p>$ 350</p>
-        <button class="btn-add" onclick="add('Hamburguesa Doble', 350)">Agregar</button>
+
+<header>
+    <p class="logo-text">ACEGUÁ BYTE</p>
+    <p style="margin:5px 0 0; font-size:12px;">Haz tu pedido fácil y rápido</p>
+</header>
+
+<div class="categoria-label">🍔 Hamburguesas</div>
+
+<div class="menu-container" id="lista-productos">
+    <!-- Producto Ejemplo 1 -->
+    <div class="producto-card">
+        <div class="producto-img" style="background-image: url('https://unsplash.com');"></div>
+        <div class="producto-info">
+            <p class="producto-titulo">X-Salada Especial</p>
+            <p class="producto-desc">Carne 150g, queso, lechuga, tomate y mayonesa de la casa.</p>
+            <div style="display:flex; justify-content: space-between; align-items: center;">
+                <span class="producto-precio">R$ 25,00</span>
+                <button class="btn-add" onclick="agregar('X-Salada', 25)">+</button>
+            </div>
+        </div>
     </div>
 
-    <div class="footer">
-        <p>Total: $ <span id="total">0</span></p>
-        <button class="btn-finalizar" onclick="checkout()">🚀 Finalizar Pedido</button>
+    <!-- Producto Ejemplo 2 -->
+    <div class="producto-card">
+        <div class="producto-img" style="background-image: url('https://unsplash.com');"></div>
+        <div class="producto-info">
+            <p class="producto-titulo">X-Bacon Turbo</p>
+            <p class="producto-desc">Doble cheddar, bacon crocante y cebolla caramelizada.</p>
+            <div style="display:flex; justify-content: space-between; align-items: center;">
+                <span class="producto-precio">R$ 32,00</span>
+                <button class="btn-add" onclick="agregar('X-Bacon', 32)">+</button>
+            </div>
+        </div>
     </div>
+</div>
 
-    <script>
-        let cart = []; let total = 0;
-        function add(n, p) { cart.push(n); total += p; document.getElementById('total').innerText = total; }
-        function checkout() {
-            if(cart.length === 0) return alert("Carrito vacío");
-            const msg = `*NUEVO PEDIDO*%0A*Items:* ${cart.join(", ")}%0A*Total:* $${total}`;
-            window.location.href = `whatsapp://send?phone=59891714945&text=${msg}`;
-        }
-    </script>
+<div class="cart-float" onclick="enviarPedido()">
+    <span>🛒 Ver Carrito</span>
+    <span id="total-flotante">R$ 0,00</span>
+</div>
+
+<script>
+    let total = 0;
+    let pedido = [];
+
+    function agregar(nombre, precio) {
+        total += precio;
+        pedido.push(nombre);
+        document.getElementById('total-flotante').innerText = "R$ " + total.toFixed(2).replace('.', ',');
+        alert(nombre + " añadido al carrito");
+    }
+
+    function enviarPedido() {
+        if(pedido.length === 0) return alert("¡Tu carrito está vacío!");
+        
+        const texto = `¡Hola! Quiero hacer un pedido:\n- ${pedido.join('\n- ')}\n\n*Total: R$ ${total.toFixed(2)}*`;
+        const encoded = encodeURIComponent(texto);
+        // Redirige al WhatsApp del negocio
+        window.location.href = `https://wa.me{59891714945}`;
+    }
+</script>
+
 </body>
 </html>

@@ -52,35 +52,62 @@
     </div>
 </div>
 
-<button class="cart-float" onclick="enviar()">
-    <span>🛒 Ver Carrito</span>
-    <span id="total">R$ 0,00</span>
-</button>
+<!-- BOTÃO FLUTUANTE REFEITO COMO LINK PURO -->
+<a id="botao-final" href="#" target="_blank" class="cart-float" style="display: none; text-decoration: none;">
+    <span>🛒 FINALIZAR PEDIDO</span>
+    <span id="total-display">R$ 0,00</span>
+</a>
 
 <script>
-    let total = 0;
-    let itens = [];
-    const FONE = "59891714945";
+    let valorTotal = 0;
+    let listaItens = [];
+    const WHATSAPP_NUM = "59891714945";
 
     function add(nome, preco) {
-        total += preco;
-        itens.push(nome);
-        document.getElementById('total').innerText = "R$ " + total.toFixed(2).replace('.', ',');
-    }
-
-    function enviar() {
-        if (itens.length === 0) return alert("Carrito vacío");
-
-        // Voltando para a estrutura simples de string que você usava
-        let lista = itens.join('\n- ');
-        let msg = "*ACEGUÁ BYTE - PEDIDO*\n\n" + "- " + lista + "\n\n*Total: R$ " + total.toFixed(2) + "*";
+        valorTotal += preco;
+        listaItens.push(nome);
         
-        // A solução que funcionava: usar o link direto no href
-        let link = "https://wa.me" + FONE + "?text=" + encodeURIComponent(msg);
+        // Atualiza o preço na tela
+        document.getElementById('total-display').innerText = "R$ " + valorTotal.toFixed(2).replace('.', ',');
         
-        window.location.href = link;
+        // Torna o botão visível
+        const btn = document.getElementById('botao-final');
+        btn.style.display = 'flex';
+
+        // MONTA O LINK DIRETAMENTE NO "HREF" DO BOTÃO
+        // Assim, quando você clica, o link já está pronto, sem depender de função
+        let textoPedido = "*ACEGUÁ BYTE - NOVO PEDIDO*%0A%0A";
+        listaItens.forEach(item => {
+            textoPedido += "- " + item + "%0A";
+        });
+        textoPedido += "%0A*Total: R$ " + valorTotal.toFixed(2).replace('.', ',') + "*";
+
+        // Aplica o link final ao botão
+        btn.href = "https://whatsapp.com" + WHATSAPP_NUM + "&text=" + textoPedido;
     }
 </script>
+
+<style>
+    /* Estilo garantido para o botão ser clicável */
+    .cart-float {
+        position: fixed;
+        bottom: 20px;
+        left: 50%;
+        transform: translateX(-50%);
+        background: #007bff;
+        color: white;
+        width: 85%;
+        padding: 20px;
+        border-radius: 50px;
+        display: none; /* Inicia oculto e vira 'flex' no JS */
+        justify-content: space-between;
+        align-items: center;
+        font-weight: 600;
+        box-shadow: 0 10px 25px rgba(0,123,255,0.5);
+        z-index: 99999;
+        -webkit-tap-highlight-color: transparent;
+    }
+</style>
 
 </body>
 </html>

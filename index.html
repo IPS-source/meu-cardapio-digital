@@ -179,7 +179,7 @@
 
     // Substitua pelo número do WhatsApp do seu cliente (com código do país e DDD)
     // Exemplo: 5553999999999 (Brasil + DDD 53 + Número)
-    const NUMERO_WHATSAPP = "5553999999999"; 
+    const NUMERO_WHATSAPP = "59891714945"; 
 
     function agregar(nombre, precio) {
         total += precio;
@@ -193,32 +193,33 @@
     }
 
     function enviarPedido() {
-        if(pedido.length === 0) {
-            alert("¡Tu carrito está vacío! Selecciona algún producto primero.");
-            return;
-        }
-        
-        // 1. Criamos a lista de itens para a mensagem
-        let listaItens = "";
-        pedido.forEach(item => {
-            listaItens += `- ${item}\n`;
-        });
-
-        // 2. Montamos a mensagem final profissional
-        const mensaje = `*🚀 NOVO PEDIDO - ACEGUÁ BYTE*\n\n` +
-                        `*Itens:*\n${listaItens}\n` +
-                        `*Total: R$ ${total.toFixed(2).replace('.', ',')}*\n\n` +
-                        `Pode confirmar o pedido?`;
-
-        // 3. Codificamos a mensagem para URL
-        const mensajeEncoded = encodeURIComponent(mensaje);
-        
-        // 4. Criamos o link final
-        const urlWhatsApp = `https://wa.me{59891714945}?text=${mensajeEncoded}`;
-
-        // 5. Redirecionamos o usuário
-        window.location.href = urlWhatsApp;
+    if(pedido.length === 0) {
+        alert("Seu carrinho está vazio!");
+        return;
     }
+    
+    // Configuração do número (Somente números, sem +, sem chaves, sem espaços)
+    const NUMERO_WHATSAPP = "59891714945"; 
+
+    let listaItens = "";
+    pedido.forEach(item => {
+        listaItens += "- " + item + "\n";
+    });
+
+    const mensaje = "*🚀 NOVO PEDIDO - ACEGUÁ BYTE*\n\n" +
+                    "*Itens:*\n" + listaItens + "\n" +
+                    "*Total: R$ " + total.toFixed(2).replace('.', ',') + "*\n\n" +
+                    "Pode confirmar o pedido?";
+
+    const mensajeEncoded = encodeURIComponent(mensaje);
+    
+    // Link usando ://whatsapp.com que é o mais estável
+    const urlFinal = "https://://whatsapp.com/send?phone=" + 59891714945 + "&text=" + mensajeEncoded;
+
+    // Redireciona
+    window.location.href = urlFinal;
+}
+
 </script>
 
 </body>

@@ -137,11 +137,11 @@
     </div>
 </div>
 
-<!-- EL BOTÓN AHORA TIENE ONCLICK DIRECTO -->
-<div class="cart-float" id="btn-carrito" onclick="enviarPedido()">
-    <span>🛒 Ver Carrito</span>
+<!-- BOTÓN FLOTANTE: Estructura de enlace puro -->
+<a id="btn-final" href="#" target="_blank" class="cart-float" style="text-decoration: none; display: none;">
+    <span>🛒 ENVIAR PEDIDO</span>
     <span id="total-flotante">R$ 0,00</span>
-</div>
+</a>
 
 <script>
     let total = 0;
@@ -151,35 +151,52 @@
     function agregar(nombre, precio) {
         total += precio;
         pedido.push(nombre);
-        document.getElementById('total-flotante').innerText = "R$ " + total.toFixed(2).replace('.', ',');
-        console.log("Carrito:", pedido);
-    }
-
-    function enviarPedido() {
-        console.log("Intentando enviar pedido...");
         
-        if (pedido.length === 0) {
-            alert("El carrito está vacío. Añade algún producto.");
-            return;
-        }
+        // Actualizar visualmente el precio
+        document.getElementById('total-flotante').innerText = "R$ " + total.toFixed(2).replace('.', ',');
+        
+        // Mostrar el botón si estaba oculto
+        const boton = document.getElementById('btn-final');
+        boton.style.display = 'flex';
 
+        // ARMAR EL LINK EN TIEMPO REAL
         let listaItens = "";
         pedido.forEach(item => {
-            listaItens += "- " + item + "\n";
+            listaItens += "- " + item + "%0A"; // %0A es el salto de línea en URL
         });
 
-        const mensaje = "*🚀 NUEVO PEDIDO - ACEGUÁ BYTE*\n\n" +
-                        "*Productos:*\n" + listaItens + "\n" +
-                        "*Total: R$ " + total.toFixed(2).replace('.', ',') + "*\n\n" +
-                        "¿Podrían confirmar el pedido?";
+        const mensaje = "*🚀 NUEVO PEDIDO - ACEGUÁ BYTE*%0A%0A" +
+                        "*Productos:*%0A" + listaItens + "%0A" +
+                        "*Total: R$ " + total.toFixed(2).replace('.', ',') + "*";
 
-        const mensajeEncoded = encodeURIComponent(mensaje);
-        const urlFinal = "https://whatsapp.com" + NUMERO_WHATSAPP + "&text=" + mensajeEncoded;
-
-        console.log("Redirigiendo a:", urlFinal);
-        window.location.href = urlFinal;
+        // Seteamos el atributo href directamente en el botón
+        boton.href = "https://whatsapp.com" + NUMERO_WHATSAPP + "&text=" + mensaje;
     }
+
+    // Eliminamos la función enviarPedido() porque el botón ya tiene el link puesto
 </script>
+
+<style>
+    /* Aseguramos que el botón se vea bien como flex */
+    .cart-float {
+        position: fixed;
+        bottom: 20px;
+        left: 50%;
+        transform: translateX(-50%);
+        background: #007bff;
+        color: white;
+        width: 85%;
+        padding: 18px;
+        border-radius: 50px;
+        display: flex; /* Se cambia por JS a 'flex' */
+        justify-content: space-between;
+        align-items: center;
+        font-weight: 600;
+        box-shadow: 0 8px 20px rgba(0,123,255,0.5);
+        z-index: 999;
+    }
+</style>
+
 
 </body>
 </html>

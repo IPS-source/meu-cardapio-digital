@@ -3,90 +3,125 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Cardápio IPS-Source</title>
+    <title>Cardápio — Aceguá Byte</title>
     <style>
         * { margin: 0; padding: 0; box-sizing: border-box; }
-        body { font-family: 'Segoe UI', sans-serif; background: #f5f5f5; padding: 20px; padding-bottom: 100px; }
-        h1 { text-align: center; margin-bottom: 20px; color: #333; }
-        .categoria { font-size: 18px; font-weight: bold; color: #e74c3c; margin: 20px 0 10px; text-align: left; max-width: 400px; margin-left: auto; margin-right: auto; padding-left: 10px; }
-        .card { background: white; border-radius: 12px; padding: 15px; margin: 10px auto; max-width: 400px; box-shadow: 0 2px 8px rgba(0,0,0,0.1); display: flex; justify-content: space-between; align-items: center; }
-        .card-info h3 { font-size: 16px; color: #333; }
-        .card-info p { color: #666; font-size: 14px; }
-        .card-info .preco { color: #25d366; font-weight: bold; font-size: 18px; }
-        .btn-add { background: #e74c3c; color: white; border: none; padding: 8px 16px; border-radius: 8px; cursor: pointer; font-weight: bold; font-size: 16px; }
-        .btn-add:active { background: #c0392b; }
-        .item-carrinho { background: white; border-radius: 8px; padding: 10px 15px; margin: 5px auto; max-width: 400px; display: flex; justify-content: space-between; font-size: 14px; }
-        .carrinho-section { max-width: 400px; margin: 20px auto; }
-        .carrinho-section h2 { text-align: center; margin-bottom: 10px; color: #333; }
-        .footer { position: fixed; bottom: 0; left: 0; right: 0; background: white; padding: 15px 20px; border-top: 2px solid #ddd; box-shadow: 0 -2px 10px rgba(0,0,0,0.1); }
-        .footer-info { text-align: center; margin-bottom: 10px; font-size: 18px; font-weight: bold; color: #333; }
-        .btn-finalizar { background: #25d366; color: white; border: none; padding: 15px 30px; border-radius: 30px; font-weight: bold; width: 100%; font-size: 16px; cursor: pointer; }
-        .btn-finalizar:disabled { background: #ccc; cursor: not-allowed; }
-        .btn-finalizar:active:not(:disabled) { background: #1da851; }
-        .confirmacao { display: flex; align-items: center; justify-content: center; height: 100vh; text-align: center; padding: 20px; }
-        .confirmacao-box { background: white; border-radius: 15px; padding: 40px; box-shadow: 0 4px 20px rgba(0,0,0,0.1); max-width: 350px; }
-        .confirmacao-box h1 { color: #25d366; margin-bottom: 15px; }
-        .confirmacao-box p { color: #666; margin-bottom: 10px; }
-        .confirmacao-box button { background: #25d366; color: white; border: none; padding: 15px 30px; border-radius: 30px; font-weight: bold; cursor: pointer; font-size: 16px; margin-top: 15px; }
-        .empty-cart { text-align: center; color: #999; padding: 20px; font-size: 14px; }
+        body { font-family: 'Segoe UI', sans-serif; background: #0a0a0a; color: #e0e0e0; padding: 0 0 110px; }
+
+        .header { background: #111; padding: 20px; text-align: center; border-bottom: 2px solid #00d4ff; position: sticky; top: 0; z-index: 10; }
+        .header h1 { color: #00d4ff; font-size: 22px; }
+        .header p { color: #666; font-size: 13px; margin-top: 4px; }
+
+        .container { max-width: 480px; margin: 0 auto; padding: 15px; }
+
+        .categoria { font-size: 16px; font-weight: bold; color: #00d4ff; margin: 25px 0 12px; padding-left: 5px; display: flex; align-items: center; gap: 8px; }
+        .categoria::after { content: ''; flex: 1; height: 1px; background: #222; }
+
+        .card { background: #141414; border: 1px solid #222; border-radius: 12px; padding: 14px; margin-bottom: 10px; display: flex; justify-content: space-between; align-items: center; transition: border-color 0.2s; }
+        .card:hover { border-color: #00d4ff; }
+        .card-info h3 { font-size: 15px; color: #fff; margin-bottom: 4px; }
+        .card-info .preco { color: #00d4ff; font-weight: bold; font-size: 17px; }
+        .card-info .desc { color: #777; font-size: 12px; margin-top: 2px; }
+
+        .btn-add { background: #00d4ff; color: #000; border: none; width: 36px; height: 36px; border-radius: 50%; cursor: pointer; font-weight: bold; font-size: 20px; display: flex; align-items: center; justify-content: center; transition: background 0.2s, transform 0.1s; }
+        .btn-add:active { background: #00a0cc; transform: scale(0.9); }
+
+        .carrinho-section { max-width: 480px; margin: 0 auto; padding: 0 15px; }
+        .carrinho-section h2 { text-align: center; margin: 20px 0 10px; color: #fff; font-size: 16px; }
+        .item-carrinho { background: #141414; border: 1px solid #222; border-radius: 8px; padding: 12px 15px; margin-bottom: 6px; display: flex; justify-content: space-between; font-size: 14px; align-items: center; }
+        .item-carrinho .remover { color: #e74c3c; background: none; border: none; font-size: 18px; cursor: pointer; padding: 0 0 0 10px; }
+
+        .footer { position: fixed; bottom: 0; left: 0; right: 0; background: #111; border-top: 1px solid #00d4ff; padding: 15px 20px; z-index: 10; }
+        .footer-inner { max-width: 480px; margin: 0 auto; display: flex; justify-content: space-between; align-items: center; gap: 15px; }
+        .footer-total { font-size: 14px; color: #888; }
+        .footer-total span { color: #00d4ff; font-size: 20px; font-weight: bold; }
+        .btn-finalizar { background: #00d4ff; color: #000; border: none; padding: 14px 24px; border-radius: 30px; font-weight: bold; font-size: 14px; cursor: pointer; white-space: nowrap; transition: background 0.2s, transform 0.1s; }
+        .btn-finalizar:active:not(:disabled) { background: #00a0cc; transform: scale(0.97); }
+        .btn-finalizar:disabled { background: #333; color: #666; cursor: not-allowed; }
+
+        .confirmacao { display: flex; align-items: center; justify-content: center; min-height: 100vh; text-align: center; padding: 20px; }
+        .confirmacao-box { background: #141414; border: 1px solid #00d4ff; border-radius: 16px; padding: 40px 30px; max-width: 360px; width: 100%; }
+        .confirmacao-box .icon { font-size: 48px; margin-bottom: 15px; }
+        .confirmacao-box h1 { color: #00d4ff; margin-bottom: 10px; font-size: 22px; }
+        .confirmacao-box p { color: #888; margin-bottom: 8px; font-size: 14px; }
+        .confirmacao-box button { background: #00d4ff; color: #000; border: none; padding: 14px 30px; border-radius: 30px; font-weight: bold; cursor: pointer; font-size: 15px; margin-top: 20px; transition: background 0.2s; }
+        .confirmacao-box button:hover { background: #00a0cc; }
+
+        .badge-added { position: fixed; top: 80px; left: 50%; transform: translateX(-50%); background: #00d4ff; color: #000; padding: 8px 20px; border-radius: 20px; font-size: 13px; font-weight: bold; opacity: 0; transition: opacity 0.3s; pointer-events: none; z-index: 20; }
+        .badge-added.show { opacity: 1; }
     </style>
 </head>
 <body>
-    <h1>🍕 Cardápio IPS-Source</h1>
 
-    <div class="categoria">🍕 Pizzas</div>
-    <div class="card">
-        <div class="card-info">
-            <h3>Pizza Margherita</h3>
-            <p class="preco">R$ 45,00</p>
-        </div>
-        <button class="btn-add" onclick="add('Pizza Margherita', 45)">+</button>
-    </div>
-    <div class="card">
-        <div class="card-info">
-            <h3>Pizza Calabresa</h3>
-            <p class="preco">R$ 42,00</p>
-        </div>
-        <button class="btn-add" onclick="add('Pizza Calabresa', 42)">+</button>
-    </div>
-    <div class="card">
-        <div class="card-info">
-            <h3>Pizza 4 Queijos</h3>
-            <p class="preco">R$ 50,00</p>
-        </div>
-        <button class="btn-add" onclick="add('Pizza 4 Queijos', 50)">+</button>
+    <div class="header">
+        <h1>⚡ Aceguá Byte</h1>
+        <p>Faça seu pedido — rápido e sem complicação</p>
     </div>
 
-    <div class="categoria">🍔 Hambúrgueres</div>
-    <div class="card">
-        <div class="card-info">
-            <h3>Hambúrguer Duplo</h3>
-            <p class="preco">R$ 35,00</p>
-        </div>
-        <button class="btn-add" onclick="add('Hambúrguer Duplo', 35)">+</button>
-    </div>
-    <div class="card">
-        <div class="card-info">
-            <h3>Hambúrguer com Bacon</h3>
-            <p class="preco">R$ 38,00</p>
-        </div>
-        <button class="btn-add" onclick="add('Hambúrguer com Bacon', 38)">+</button>
-    </div>
+    <div class="container">
 
-    <div class="categoria">🥤 Bebidas</div>
-    <div class="card">
-        <div class="card-info">
-            <h3>Refrigerante Lata</h3>
-            <p class="preco">R$ 8,00</p>
+        <div class="categoria">🍕 Pizzas</div>
+        <div class="card">
+            <div class="card-info">
+                <h3>Pizza Margherita</h3>
+                <p class="preco">R$ 45,00</p>
+                <p class="desc">Molho de tomate, mussarela, manjericão</p>
+            </div>
+            <button class="btn-add" onclick="add('Pizza Margherita', 45)">+</button>
         </div>
-        <button class="btn-add" onclick="add('Refrigerante Lata', 8)">+</button>
-    </div>
-    <div class="card">
-        <div class="card-info">
-            <h3>Suco Natural</h3>
-            <p class="preco">R$ 12,00</p>
+        <div class="card">
+            <div class="card-info">
+                <h3>Pizza Calabresa</h3>
+                <p class="preco">R$ 42,00</p>
+                <p class="desc">Calabresa fatiada, cebola, mussarela</p>
+            </div>
+            <button class="btn-add" onclick="add('Pizza Calabresa', 42)">+</button>
         </div>
-        <button class="btn-add" onclick="add('Suco Natural', 12)">+</button>
+        <div class="card">
+            <div class="card-info">
+                <h3>Pizza 4 Queijos</h3>
+                <p class="preco">R$ 50,00</p>
+                <p class="desc">Mussarela, provolone, parmesão, gorgonzola</p>
+            </div>
+            <button class="btn-add" onclick="add('Pizza 4 Queijos', 50)">+</button>
+        </div>
+
+        <div class="categoria">🍔 Hambúrgueres</div>
+        <div class="card">
+            <div class="card-info">
+                <h3>Hambúrguer Duplo</h3>
+                <p class="preco">R$ 35,00</p>
+                <p class="desc">2x carne, queijo, alface, tomate, molho especial</p>
+            </div>
+            <button class="btn-add" onclick="add('Hambúrguer Duplo', 35)">+</button>
+        </div>
+        <div class="card">
+            <div class="card-info">
+                <h3>Hambúrguer com Bacon</h3>
+                <p class="preco">R$ 38,00</p>
+                <p class="desc">Carne 180g, bacon crocante, queijo cheddar</p>
+            </div>
+            <button class="btn-add" onclick="add('Hambúrguer com Bacon', 38)">+</button>
+        </div>
+
+        <div class="categoria">🥤 Bebidas</div>
+        <div class="card">
+            <div class="card-info">
+                <h3>Refrigerante Lata</h3>
+                <p class="preco">R$ 8,00</p>
+                <p class="desc">Coca-Cola, Guaraná, Fanta</p>
+            </div>
+            <button class="btn-add" onclick="add('Refrigerante Lata', 8)">+</button>
+        </div>
+        <div class="card">
+            <div class="card-info">
+                <h3>Suco Natural</h3>
+                <p class="preco">R$ 12,00</p>
+                <p class="desc">Laranja, limão, maracujá</p>
+            </div>
+            <button class="btn-add" onclick="add('Suco Natural', 12)">+</button>
+        </div>
+
     </div>
 
     <div class="carrinho-section" id="carrinho-section" style="display:none;">
@@ -95,12 +130,15 @@
     </div>
 
     <div class="footer" id="footer">
-        <div class="footer-info">Total: R$ <span id="total">0,00</span></div>
-        <button class="btn-finalizar" id="btn-finalizar" onclick="checkout()" disabled>📲 Finalizar Pedido pelo WhatsApp</button>
+        <div class="footer-inner">
+            <div class="footer-total">Total<br><span>R$ <span id="total">0,00</span></span></div>
+            <button class="btn-finalizar" id="btn-finalizar" onclick="checkout()" disabled>📲 Enviar Pedido</button>
+        </div>
     </div>
 
+    <div class="badge-added" id="badge">✓ Adicionado</div>
+
     <script>
-        // CONFIG: Coloque aqui o número do WhatsApp do bot (com código do país, sem + ou espaços)
         const NUMERO_WHATSAPP = '59891714945';
 
         let cart = [];
@@ -110,9 +148,16 @@
             return v.toFixed(2).replace('.', ',');
         }
 
+        function showBadge() {
+            const badge = document.getElementById('badge');
+            badge.classList.add('show');
+            setTimeout(() => badge.classList.remove('show'), 1200);
+        }
+
         function add(nome, preco) {
             cart.push({ nome: nome, preco: preco });
             total += preco;
+            showBadge();
             atualizarUI();
         }
 
@@ -134,7 +179,10 @@
                 items.innerHTML = cart.map((item, i) =>
                     `<div class="item-carrinho">
                         <span>${item.nome}</span>
-                        <span>R$ ${formatMoney(item.preco)} <a href="#" onclick="remover(${i}); return false;" style="color:#e74c3c;margin-left:8px;text-decoration:none;">✕</a></span>
+                        <span style="display:flex;align-items:center;">
+                            R$ ${formatMoney(item.preco)}
+                            <button class="remover" onclick="remover(${i})">✕</button>
+                        </span>
                     </div>`
                 ).join('');
             } else {
@@ -146,8 +194,8 @@
         function checkout() {
             if (cart.length === 0) return alert('Carrinho vazio!');
 
-            const itens = cart.map((item, i) => `${i + 1}. ${item.nome} - R$ ${formatMoney(item.preco)}`).join('%0A');
-            const msg = `📋 *NOVO PEDIDO*%0A%0A${itens}%0A%0A💰 *Total: R$ ${formatMoney(total)}*`;
+            const itens = cart.map((item, i) => `${i + 1}. ${item.nome} — R$ ${formatMoney(item.preco)}`).join('%0A');
+            const msg = `⚡ *NOVO PEDIDO — ACEGUÁ BYTE*%0A%0A${itens}%0A%0A💰 *Total: R$ ${formatMoney(total)}*`;
 
             const url = `https://wa.me/${NUMERO_WHATSAPP}?text=${msg}`;
             window.open(url, '_blank');
@@ -159,10 +207,11 @@
             document.body.innerHTML = `
                 <div class="confirmacao">
                     <div class="confirmacao-box">
-                        <h1>✅ Pedido Enviado!</h1>
-                        <p>Abra o WhatsApp e envie a mensagem para confirmar seu pedido.</p>
-                        <p style="font-size:13px;color:#999;">Aguarde a confirmação no chat.</p>
-                        <button onclick="location.reload()">🍕 Fazer Novo Pedido</button>
+                        <div class="icon">✅</div>
+                        <h1>Pedido Enviado!</h1>
+                        <p>Abra o WhatsApp e envie a mensagem para confirmar.</p>
+                        <p style="color:#555;font-size:12px;">Aguarde a confirmação no chat.</p>
+                        <button onclick="location.reload()">⚡ Fazer Novo Pedido</button>
                     </div>
                 </div>
             `;

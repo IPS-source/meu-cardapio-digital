@@ -1,113 +1,172 @@
 <!DOCTYPE html>
-<html lang="es">
+<html lang="pt-BR">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Menú Digital | Aceguá Byte</title>
-    <link href="https://googleapis.com" rel="stylesheet">
+    <title>Cardápio IPS-Source</title>
     <style>
-        :root { --azul: #007bff; --bg: #121212; --card: #1e1e1e; }
-        body { font-family: 'Poppins', sans-serif; background: var(--bg); color: white; margin: 0; padding-bottom: 100px; }
-        header { background: #000; padding: 30px; text-align: center; border-bottom: 3px solid var(--azul); }
-        .logo { color: var(--azul); font-weight: 600; font-size: 24px; margin: 0; letter-spacing: 2px; }
-        .categoria { padding: 20px; font-weight: 600; color: var(--azul); }
-        .card { background: var(--card); margin: 0 15px 15px; border-radius: 12px; display: flex; overflow: hidden; }
-        .img { width: 90px; height: 90px; background-size: cover; }
-        .info { padding: 10px; flex: 1; }
-        .precio { color: var(--azul); font-weight: 600; }
-        .btn-add { background: var(--azul); color: white; border: none; padding: 5px 15px; border-radius: 5px; float: right; cursor: pointer; }
-        
-        /* O BOTÃO QUE VOCÊ VALIDOU */
-        .cart-float {
-            position: fixed; bottom: 20px; left: 50%; transform: translateX(-50%);
-            background: var(--azul); color: white; width: 85%; padding: 20px;
-            border-radius: 50px; display: flex; justify-content: space-between;
-            font-weight: 600; box-shadow: 0 8px 20px rgba(0,123,255,0.5);
-            border: none; cursor: pointer; z-index: 9999;
-        }
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { font-family: 'Segoe UI', sans-serif; background: #f5f5f5; padding: 20px; padding-bottom: 100px; }
+        h1 { text-align: center; margin-bottom: 20px; color: #333; }
+        .categoria { font-size: 18px; font-weight: bold; color: #e74c3c; margin: 20px 0 10px; text-align: left; max-width: 400px; margin-left: auto; margin-right: auto; padding-left: 10px; }
+        .card { background: white; border-radius: 12px; padding: 15px; margin: 10px auto; max-width: 400px; box-shadow: 0 2px 8px rgba(0,0,0,0.1); display: flex; justify-content: space-between; align-items: center; }
+        .card-info h3 { font-size: 16px; color: #333; }
+        .card-info p { color: #666; font-size: 14px; }
+        .card-info .preco { color: #25d366; font-weight: bold; font-size: 18px; }
+        .btn-add { background: #e74c3c; color: white; border: none; padding: 8px 16px; border-radius: 8px; cursor: pointer; font-weight: bold; font-size: 16px; }
+        .btn-add:active { background: #c0392b; }
+        .item-carrinho { background: white; border-radius: 8px; padding: 10px 15px; margin: 5px auto; max-width: 400px; display: flex; justify-content: space-between; font-size: 14px; }
+        .carrinho-section { max-width: 400px; margin: 20px auto; }
+        .carrinho-section h2 { text-align: center; margin-bottom: 10px; color: #333; }
+        .footer { position: fixed; bottom: 0; left: 0; right: 0; background: white; padding: 15px 20px; border-top: 2px solid #ddd; box-shadow: 0 -2px 10px rgba(0,0,0,0.1); }
+        .footer-info { text-align: center; margin-bottom: 10px; font-size: 18px; font-weight: bold; color: #333; }
+        .btn-finalizar { background: #25d366; color: white; border: none; padding: 15px 30px; border-radius: 30px; font-weight: bold; width: 100%; font-size: 16px; cursor: pointer; }
+        .btn-finalizar:disabled { background: #ccc; cursor: not-allowed; }
+        .btn-finalizar:active:not(:disabled) { background: #1da851; }
+        .confirmacao { display: flex; align-items: center; justify-content: center; height: 100vh; text-align: center; padding: 20px; }
+        .confirmacao-box { background: white; border-radius: 15px; padding: 40px; box-shadow: 0 4px 20px rgba(0,0,0,0.1); max-width: 350px; }
+        .confirmacao-box h1 { color: #25d366; margin-bottom: 15px; }
+        .confirmacao-box p { color: #666; margin-bottom: 10px; }
+        .confirmacao-box button { background: #25d366; color: white; border: none; padding: 15px 30px; border-radius: 30px; font-weight: bold; cursor: pointer; font-size: 16px; margin-top: 15px; }
+        .empty-cart { text-align: center; color: #999; padding: 20px; font-size: 14px; }
     </style>
 </head>
 <body>
+    <h1>🍕 Cardápio IPS-Source</h1>
 
-<header>
-    <p class="logo">ACEGUÁ BYTE</p>
-</header>
-
-<div class="categoria">🍔 Hamburguesas</div>
-
-<div id="productos">
+    <div class="categoria">🍕 Pizzas</div>
     <div class="card">
-        <div class="img" style="background-image: url('https://unsplash.com');"></div>
-        <div class="info">
-            <b>X-Salada</b><br><span class="precio">R$ 25,00</span>
-            <button class="btn-add" onclick="add('X-Salada', 25)">+</button>
+        <div class="card-info">
+            <h3>Pizza Margherita</h3>
+            <p class="preco">R$ 45,00</p>
         </div>
+        <button class="btn-add" onclick="add('Pizza Margherita', 45)">+</button>
     </div>
     <div class="card">
-        <div class="img" style="background-image: url('https://unsplash.com');"></div>
-        <div class="info">
-            <b>X-Bacon</b><br><span class="precio">R$ 32,00</span>
-            <button class="btn-add" onclick="add('X-Bacon', 32)">+</button>
+        <div class="card-info">
+            <h3>Pizza Calabresa</h3>
+            <p class="preco">R$ 42,00</p>
         </div>
+        <button class="btn-add" onclick="add('Pizza Calabresa', 42)">+</button>
     </div>
-</div>
+    <div class="card">
+        <div class="card-info">
+            <h3>Pizza 4 Queijos</h3>
+            <p class="preco">R$ 50,00</p>
+        </div>
+        <button class="btn-add" onclick="add('Pizza 4 Queijos', 50)">+</button>
+    </div>
 
-<!-- BOTÃO FLUTUANTE REFEITO COMO LINK PURO -->
-<a id="botao-final" href="#" target="_blank" class="cart-float" style="display: none; text-decoration: none;">
-    <span>🛒 FINALIZAR PEDIDO</span>
-    <span id="total-display">R$ 0,00</span>
-</a>
+    <div class="categoria">🍔 Hambúrgueres</div>
+    <div class="card">
+        <div class="card-info">
+            <h3>Hambúrguer Duplo</h3>
+            <p class="preco">R$ 35,00</p>
+        </div>
+        <button class="btn-add" onclick="add('Hambúrguer Duplo', 35)">+</button>
+    </div>
+    <div class="card">
+        <div class="card-info">
+            <h3>Hambúrguer com Bacon</h3>
+            <p class="preco">R$ 38,00</p>
+        </div>
+        <button class="btn-add" onclick="add('Hambúrguer com Bacon', 38)">+</button>
+    </div>
 
-<script>
-    let valorTotal = 0;
-    let listaItens = [];
-    const WHATSAPP_NUM = "59891714945";
+    <div class="categoria">🥤 Bebidas</div>
+    <div class="card">
+        <div class="card-info">
+            <h3>Refrigerante Lata</h3>
+            <p class="preco">R$ 8,00</p>
+        </div>
+        <button class="btn-add" onclick="add('Refrigerante Lata', 8)">+</button>
+    </div>
+    <div class="card">
+        <div class="card-info">
+            <h3>Suco Natural</h3>
+            <p class="preco">R$ 12,00</p>
+        </div>
+        <button class="btn-add" onclick="add('Suco Natural', 12)">+</button>
+    </div>
 
-    function add(nome, preco) {
-        valorTotal += preco;
-        listaItens.push(nome);
-        
-        // Atualiza o preço na tela
-        document.getElementById('total-display').innerText = "R$ " + valorTotal.toFixed(2).replace('.', ',');
-        
-        // Torna o botão visível
-        const btn = document.getElementById('botao-final');
-        btn.style.display = 'flex';
+    <div class="carrinho-section" id="carrinho-section" style="display:none;">
+        <h2>🛒 Seu Carrinho</h2>
+        <div id="carrinho-items"></div>
+    </div>
 
-        // MONTA O LINK DIRETAMENTE NO "HREF" DO BOTÃO
-        // Assim, quando você clica, o link já está pronto, sem depender de função
-        let textoPedido = "*ACEGUÁ BYTE - NOVO PEDIDO*%0A%0A";
-        listaItens.forEach(item => {
-            textoPedido += "- " + item + "%0A";
-        });
-        textoPedido += "%0A*Total: R$ " + valorTotal.toFixed(2).replace('.', ',') + "*";
+    <div class="footer" id="footer">
+        <div class="footer-info">Total: R$ <span id="total">0,00</span></div>
+        <button class="btn-finalizar" id="btn-finalizar" onclick="checkout()" disabled>📲 Finalizar Pedido pelo WhatsApp</button>
+    </div>
 
-        // Aplica o link final ao botão
-        btn.href = "https://whatsapp.com" + WHATSAPP_NUM + "&text=" + textoPedido;
-    }
-</script>
+    <script>
+        // CONFIG: Coloque aqui o número do WhatsApp do bot (com código do país, sem + ou espaços)
+        const NUMERO_WHATSAPP = '59891714945';
 
-<style>
-    /* Estilo garantido para o botão ser clicável */
-    .cart-float {
-        position: fixed;
-        bottom: 20px;
-        left: 50%;
-        transform: translateX(-50%);
-        background: #007bff;
-        color: white;
-        width: 85%;
-        padding: 20px;
-        border-radius: 50px;
-        display: none; /* Inicia oculto e vira 'flex' no JS */
-        justify-content: space-between;
-        align-items: center;
-        font-weight: 600;
-        box-shadow: 0 10px 25px rgba(0,123,255,0.5);
-        z-index: 99999;
-        -webkit-tap-highlight-color: transparent;
-    }
-</style>
+        let cart = [];
+        let total = 0;
 
+        function formatMoney(v) {
+            return v.toFixed(2).replace('.', ',');
+        }
+
+        function add(nome, preco) {
+            cart.push({ nome: nome, preco: preco });
+            total += preco;
+            atualizarUI();
+        }
+
+        function remover(index) {
+            total -= cart[index].preco;
+            cart.splice(index, 1);
+            atualizarUI();
+        }
+
+        function atualizarUI() {
+            document.getElementById('total').innerText = formatMoney(total);
+            const btn = document.getElementById('btn-finalizar');
+            const section = document.getElementById('carrinho-section');
+            const items = document.getElementById('carrinho-items');
+
+            if (cart.length > 0) {
+                btn.disabled = false;
+                section.style.display = 'block';
+                items.innerHTML = cart.map((item, i) =>
+                    `<div class="item-carrinho">
+                        <span>${item.nome}</span>
+                        <span>R$ ${formatMoney(item.preco)} <a href="#" onclick="remover(${i}); return false;" style="color:#e74c3c;margin-left:8px;text-decoration:none;">✕</a></span>
+                    </div>`
+                ).join('');
+            } else {
+                btn.disabled = true;
+                section.style.display = 'none';
+            }
+        }
+
+        function checkout() {
+            if (cart.length === 0) return alert('Carrinho vazio!');
+
+            const itens = cart.map((item, i) => `${i + 1}. ${item.nome} - R$ ${formatMoney(item.preco)}`).join('%0A');
+            const msg = `📋 *NOVO PEDIDO*%0A%0A${itens}%0A%0A💰 *Total: R$ ${formatMoney(total)}*`;
+
+            const url = `https://wa.me/${NUMERO_WHATSAPP}?text=${msg}`;
+            window.open(url, '_blank');
+
+            mostrarConfirmacao();
+        }
+
+        function mostrarConfirmacao() {
+            document.body.innerHTML = `
+                <div class="confirmacao">
+                    <div class="confirmacao-box">
+                        <h1>✅ Pedido Enviado!</h1>
+                        <p>Abra o WhatsApp e envie a mensagem para confirmar seu pedido.</p>
+                        <p style="font-size:13px;color:#999;">Aguarde a confirmação no chat.</p>
+                        <button onclick="location.reload()">🍕 Fazer Novo Pedido</button>
+                    </div>
+                </div>
+            `;
+        }
+    </script>
 </body>
 </html>
